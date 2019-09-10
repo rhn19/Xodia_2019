@@ -7,12 +7,11 @@
   </head>
   <body>
     {% block content %}
-      <p>User <b>{{user.username}}</b> is successfuly logged in!</p>
+      <p>PLAYABLE UI</p>
       <form method = "POST" action={% url 'user_logout' %}>
         {% csrf_token %}
         <input type="submit" value="Logout">
       </form>
-      <a href="{% url 'playable_ui' %}">Playable UI</a>
     {% endblock content %}
   </body>
 </html>
