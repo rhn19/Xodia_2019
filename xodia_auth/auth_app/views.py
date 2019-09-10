@@ -10,10 +10,12 @@ from django.views.generic import View
 from django.db.utils import IntegrityError
 
 # Create your views here.
+'''
 class HomeView(View):
     template_name = 'auth_app/index.html'
     def get(self, request):
         return render(request, self.template_name)
+'''
 
 class LoginView(View):
     template_name = 'auth_app/login.html'
@@ -52,25 +54,35 @@ class RegisterView(View):
     template_name = 'auth_app/register.html'
 
     def post(self, request):
-        if request.POST['password'] == request.POST['password2'] :
-            try:
-                user = User()
-                user.username = request.POST['username']
-                user.set_password(request.POST['password'])
-                user.save()
-                login(request, user)
+        try:
+            user = User()
+            user.username = request.POST['username']
+            user.set_password(request.POST['password'])
+            user.save()
+            login(request, user)
 
-            except IntegrityError:
-                context={'error': 'Username already exists'}
-                return render(request, self.template_name, context)
+            user = request.user
+            user.first_name = request.POST['first_name']
+            user.last_name = request.POST['last_name']
+            user.email = request.POST['email']
+            if request.POST['college_name'] != "" :
+                user.profile.college_name = request.POST['college_name']
+            if request.POST['bio'] != "" :
+                user.profile.bio = request.POST['bio']
+            user.save()
 
-            return HttpResponseRedirect(reverse('user_profile'))
-        else:
-            return render(request, self.template_name, {"error":"Passwords do not match!"})
+        except IntegrityError:
+            context={'error': 'Username already exists'}
+            return render(request, self.template_name, context)
+
+        return HttpResponseRedirect(reverse('user_login'))
+
 
     def get(self, request):
         return render(request, self.template_name)
 
+
+'''
 class ProfileView(View):
     template_name = 'auth_app/profile.html'
 
@@ -88,3 +100,4 @@ class ProfileView(View):
 
     def get(self, request):
         return render(request, self.template_name)
+'''
