@@ -58,10 +58,6 @@ class RegisterView(View):
             user = User()
             user.username = request.POST['username']
             user.set_password(request.POST['password'])
-            user.save()
-            login(request, user)
-
-            user = request.user
             user.first_name = request.POST['first_name']
             user.last_name = request.POST['last_name']
             user.email = request.POST['email']
@@ -70,6 +66,7 @@ class RegisterView(View):
             if request.POST['bio'] != "" :
                 user.profile.bio = request.POST['bio']
             user.save()
+            login(request, user)
 
         except IntegrityError:
             context={'error': 'Username already exists'}
