@@ -26,7 +26,7 @@ class LoginView(View):
         context = {}
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request=request, username=username, password=password)
         if user:
             login(request, user)
             return HttpResponseRedirect(reverse('login_success'))
@@ -54,7 +54,11 @@ class RegisterView(View):
     template_name = 'auth_app/register.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        if request.user.is_authenticated():
+            user = request.user.username
+            return render(request, 'auth_app/success.html', {'username': user})
+        else:
+            return render(request, self.template_name)
 
     def post(self, request):
         try:
