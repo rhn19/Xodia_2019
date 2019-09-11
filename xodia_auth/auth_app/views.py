@@ -13,12 +13,12 @@ from django.db.utils import IntegrityError
 
 
 class LoginView(View):
-    template_name = 'auth_app/login.html'
+    template_name = 'auth_app/index.html'
 
     def get(self, request):
         if request.user.is_authenticated():
             user = request.user.username
-            return render(request, 'auth_app/success.html', {'username': user})
+            return render(request, 'auth_app/postlogin.html', {'username': user})
         else:
             return render(request, self.template_name)
 
@@ -42,7 +42,7 @@ class LogoutView(View):
 
 
 class SuccessView(View):
-    template_name = 'auth_app/success.html'
+    template_name = 'auth_app/postlogin.html'
 
     def get(self, request):
         context = {}
@@ -56,7 +56,7 @@ class RegisterView(View):
     def get(self, request):
         if request.user.is_authenticated():
             user = request.user.username
-            return render(request, 'auth_app/success.html', {'username': user})
+            return render(request, 'auth_app/postlogin.html', {'username': user})
         else:
             return render(request, self.template_name)
 
@@ -83,7 +83,7 @@ class RegisterView(View):
 
 
 class PlayableUI(View):
-    template_name = 'auth_app/playableUI.html'
+    template_name = 'auth_app/playable_ui.html'
 
     def get(self, request):
         return render(request, self.template_name, {})
