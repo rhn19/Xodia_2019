@@ -17,8 +17,9 @@ class LoginView(View):
 
     def get(self, request):
         if request.user.is_authenticated():
-            user = request.user.username
-            return render(request, 'auth_app/postlogin.html', {'username': user})
+            #user = request.user.username
+            #return render(request, 'auth_app/postlogin.html', {'username': user})
+            return HttpResponseRedirect(reverse('login_success'))
         else:
             return render(request, self.template_name)
 
@@ -45,9 +46,12 @@ class SuccessView(View):
     template_name = 'auth_app/postlogin.html'
 
     def get(self, request):
-        context = {}
-        context['user'] = request.user
-        return render(request, self.template_name, context)
+        if request.user.is_authenticated():
+            context = {}
+            context['user'] = request.user
+            return render(request, self.template_name, context)
+        else:
+            return HttpResponseRedirect(reverse('user_login'))
 
 
 class RegisterView(View):
@@ -55,8 +59,9 @@ class RegisterView(View):
 
     def get(self, request):
         if request.user.is_authenticated():
-            user = request.user.username
-            return render(request, 'auth_app/postlogin.html', {'username': user})
+            #user = request.user.username
+            #return render(request, 'auth_app/postlogin.html', {'username': user})
+            return HttpResponseRedirect(reverse('login_success'))
         else:
             return render(request, self.template_name)
 
