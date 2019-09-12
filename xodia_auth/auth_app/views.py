@@ -41,6 +41,10 @@ class LogoutView(View):
         logout(request)
         return HttpResponseRedirect(reverse('user_login'))
 
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(reverse('user_login'))
+
 
 class SuccessView(View):
     template_name = 'auth_app/postlogin.html'
@@ -76,7 +80,7 @@ class RegisterView(View):
             if request.POST['college_name'] != "":
                 user.profile.college_name = request.POST['college_name']
             if request.POST['phone_no'] != "":
-                user.profile.bio = request.POST['phone_no']
+                user.profile.phone_no = request.POST['phone_no']
             user.save()
             login(request, user)
 
