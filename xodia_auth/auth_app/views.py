@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from models import User
+from .models import Profile
 from django.views.generic import View
 from django.db.utils import IntegrityError
 
@@ -18,7 +19,7 @@ class LoginView(View):
     def get(self, request):
         if request.user.is_authenticated():
             #user = request.user.username
-            #return render(request, 'auth_app/postlogin.html', {'username': user})
+            # return render(request, 'auth_app/postlogin.html', {'username': user})
             return HttpResponseRedirect(reverse('login_success'))
         else:
             return render(request, self.template_name)
@@ -27,7 +28,8 @@ class LoginView(View):
         context = {}
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request=request, username=username, password=password)
+        user = authenticate(
+            request=request, username=username, password=password)
         if user:
             login(request, user)
             return HttpResponseRedirect(reverse('login_success'))
@@ -64,24 +66,25 @@ class RegisterView(View):
     def get(self, request):
         if request.user.is_authenticated():
             #user = request.user.username
-            #return render(request, 'auth_app/postlogin.html', {'username': user})
+            # return render(request, 'auth_app/postlogin.html', {'username': user})
             return HttpResponseRedirect(reverse('login_success'))
         else:
             return render(request, self.template_name)
 
     def post(self, request):
         try:
+            profile = Profile()
             user = User()
             user.username = request.POST['username']
             user.set_password(request.POST['password'])
             user.first_name = request.POST['first_name']
             user.last_name = request.POST['last_name']
             user.email = request.POST['email']
-            if request.POST['college_name'] != "":
-                user.profile.college_name = request.POST['college_name']
-            if request.POST['phone_no'] != "":
-                user.profile.phone_no = request.POST['phone_no']
             user.save()
+            profile.user = user
+            profile.college_name = request.POST['college_name']
+            profile.phone_no = request.POST['phone_no']
+            profile.save()
             login(request, user)
 
         except IntegrityError:
