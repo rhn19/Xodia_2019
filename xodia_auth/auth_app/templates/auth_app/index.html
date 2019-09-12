@@ -36,7 +36,7 @@
 }
 .parallax {
   /* The image used */
-  background-image: url("./assets/img/dragon.jpg&#39");
+  background-image: url({% static './assets/img/dragon.jpg&#39' %});
 
   /* Set a specific height */
   min-height: 500px;
@@ -50,7 +50,7 @@
 </style>
 </head>
 
-<body class="index-page sidebar-collapse" style="background-image: url(./assets/img/dragon.jpg);
+<body class="index-page sidebar-collapse" style="background-image: url({% static './assets/img/dragon.jpg' %});
 
   /* Set a specific height */
   min-height: 500px;
@@ -108,7 +108,7 @@
   </nav>
   <!-- End Navbar -->
 
-  <div class="page-header section-dark" style="background-image: url(&#39;./assets/img/dragon.jpg&#39;) ">
+  <div class="page-header section-dark" style="background-image: url({% static '&#39;./assets/img/dragon.jpg&#39' %}); ">
    <div class="filter"></div>
     <div class="content-center">
       <div class="container">
@@ -164,7 +164,7 @@
               </div>
             </div>
                   </div>
-                  <p>{{ error }}</p>
+                  <p style="color:white;">{{ error }}</p>
                   <div class="text-center"><br>
                     <button type="submit" class="btn bg-dimgrey">Sign in</button>
                   </div><br><br>

@@ -75,8 +75,8 @@ class RegisterView(View):
             user.email = request.POST['email']
             if request.POST['college_name'] != "":
                 user.profile.college_name = request.POST['college_name']
-            if request.POST['bio'] != "":
-                user.profile.bio = request.POST['bio']
+            if request.POST['phone_no'] != "":
+                user.profile.bio = request.POST['phone_no']
             user.save()
             login(request, user)
 

@@ -9,7 +9,7 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
-    bio = models.CharField(max_length = 50, blank = True)
+    phone_no = models.CharField(max_length = 10, blank = True)
     college_name = models.CharField(max_length = 20, blank = True)
     score = models.IntegerField(default = 0)
 
