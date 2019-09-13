@@ -60,7 +60,7 @@ background-position: center;
 background-repeat: no-repeat;
 background-size: cover;">
   <!-- Navbar -->
-   <nav class="navbar navbar-expand-lg fixed-top bg-darker navbar-transparent" color-on-scroll="25">
+   <nav class="navbar navbar-expand-lg fixed-top bg-darker " color-on-scroll="25">
     <div class="container">
       <div class="navbar-translate">
         <a class="navbar-brand" href="{% url 'user_login' %}#">
@@ -106,13 +106,13 @@ background-size: cover;">
     </div>
   </nav>
   <!-- End Navbar -->
-        
-        <div class="row justify-content-center align-items-center" style="height:100vh">
+        <div class="row justify-content-center align-items-center " style="height:100vh;background-color:rgba(0,0,0,0.8)">
           <div class="col-sm" style="max-width:30rem; width:70%;">
             <div class="container rounded" style="background-color: rgba(0,0,0,0.8);">
-              <div class="card-body ">
+              <div class="card-body mr-auto ml-auto mt-5 ml-5 mr-5">
                 <div class="text-center text-muted mb-4">
-                  <small class="description-white" style="font-size: 1rem;">Register with credentials</small>
+                   <h3 style="color: #ffff">Register</h3>
+                  <div class="heading-underline" style="width: 65%;height: .2rem;background-color: #FFFFFF;margin: .8rem auto 2rem;"></div>
                 </div>
                 <form method="POST">
                     {% csrf_token %}
@@ -181,7 +181,7 @@ background-size: cover;">
                     </div>
                   </div>
 
-                  <div class="text-center"><br>
+                  <div class="text-center"><br><br>
                     <button type="submit" class="btn bg-dimgrey">Register</button>
                   </div>
                 </form>
@@ -189,7 +189,7 @@ background-size: cover;">
             </div>
            </div>
         </div>
-        <br><br>
+
         <footer class="footer  bg-darker ">
       <div class="container">
       	<!------------foooter---------->

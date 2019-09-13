@@ -6,6 +6,7 @@
 
   <link rel="apple-touch-icon" sizes="76x76" href="{% static 'assets/img/apple-icon.png' %}">
   <link rel="icon" type="image/png" href="{% static 'assets/img/xodialogo2.png' %}">
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>
@@ -46,6 +47,31 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.playButton{
+    width:60vw;
+    padding-top:10px;
+    padding-bottom:10px;
+    border-radius:5px;
+    font-size: 13px;
+    font-family: montserrat;
+    background-color:rgba(0,0,0,0.9);
+    border-width:0px;
+}
+
+@media only screen and (min-width: 600px) {
+
+.playButton{
+    width:30vw;
+    padding-top:20px;
+    padding-bottom:20px;
+    border-radius:10px;
+    font-size: 30px;
+    font-family: montserrat;
+    background-color:rgba(0,0,0,0.9);
+    border-width:0px;
+ }
 }
 </style>
 </head>
@@ -119,15 +145,16 @@
   </nav>
   <!-- End Navbar -->
 
-  <div class="page-header section-dark" style="background-color: rgba(0,0,0,.4)">
+  <div class="page-header section-dark" style="background-color:rgba(0,0,0,0.6)">
    <div class="filter"></div>
     <div class="content-center">
-      <div class="container">
-        <div class="title-brand"><br>
-          <h1 class="presentation-title" style="margin-bottom: 120px;">FrostFire</h1>
+      <div class="row d-flex justify-content-center mb-5 pb-5">
+          <img src="{% static 'frostfire1.png' %}" style="width:70%">
+      </div>
+        <div class="row d-flex justify-content-center">
+            <a href="{% url 'user_login' %}#"><button type="button" class="btn playButton">Play</button></a>
         </div>
-        
-      <a href="{% url 'user_login' %}#"><button type="button" class="btn btn-block btn-round" style="background-color: rgba(0,0,0,.8);border-width: 0px; padding-bottom: 20px; padding-top: 20px; padding-left: 10px;padding-right: 10px;font-size: 30px;">PLAY</button></a>
+
       </div>
     </div>
 
