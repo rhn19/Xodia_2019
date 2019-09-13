@@ -163,18 +163,18 @@
     {% csrf_token %}
       <div class="container">
 		<div class="row">
-			<div class="col-sm mr-auto ml-auto text-center mb-5 mt-5">
-            <div class="row justify-content-center mb-5 mt-5">
+			<div class="col-sm mr-auto ml-auto text-center">
+            <div class="row justify-content-center mb-3 mt-3">
           <div class="col-sm" style="max-width:30rem; width:75%;">
             <div class="container " style="background-color: rgba(0,0,0,0.4);border-radius: 10px;padding-left: 30px;padding-right: 30px;padding-top: 0px; ">
 
               <div class="text-center"><br><br>
-                <div class="text-center text-muted mb-5">
+                <div class="text-center text-muted mb-3">
                     <h3 class="title description-white">Sign In</h3>
-                    <div class="heading-underline" style="width: 55%;height: .2rem;background-color: #FFFFFF;margin: 0.2rem auto 2rem"></div>
+                    <div class="heading-underline" style="width: 35%;height: .1rem;background-color: #FFFFFF;margin: 0.2rem auto 2rem;margin-top: 0px;padding-top: 0px;"></div>
                   </div>
                 <form>
-                  <div class="form-group mb-3" style="padding-top: 40px;">
+                  <div class="form-group mb-4" style="padding-top: 30px;">
                     <div class="input-group input-group-alternative">
                       <div class="input-group-prepend">
                         <span class="input-group-text"><svg class="svg-inline--fa fa-user fa-w-14" aria-hidden="true" data-prefix="fa" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg><!-- <i class="fa fa-user" aria-hidden="true"></i> --></span>
@@ -182,7 +182,7 @@
                       <input class="form-control" placeholder="User Name" type="text" name="username">
                     </div>
                   </div>
-                  <div class="form-group" style="padding-bottom: 60px;">
+                  <div class="form-group" style="padding-bottom: 20px;">
                     <div class="input-group input-group-alternative">
                       <div class="input-group-prepend">
                        <span class="input-group-text"><svg class="svg-inline--fa fa-lock fa-w-14" aria-hidden="true" data-prefix="fa" data-icon="lock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"></path></svg><!-- <i class="fa fa-lock"></i> --></span>
@@ -190,16 +190,12 @@
                       <input class="form-control" placeholder="Password" type="password" name="password">
                     </div>
                   </div>
-
-                    <div class="row mt-3">
-
-              
-            </div>
-                  </div>
                   <p style="color:white;">{{ error }}</p>
                   <div class="text-center"><br>
                     <button type="submit" class="btn bg-dimgrey">Sign in</button>
                   </div><br><br>
+                  </div>
+                  
                 </form>
               </div>
             </div>
