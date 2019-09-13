@@ -9,7 +9,7 @@
   <link href="{% static './register_files/font-awesome.min.css' %}" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>
-    Xodia-FrostFire
+    XOdia '19
   </title>
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport">
   <!--     Fonts and icons     -->
@@ -74,6 +74,11 @@ background-size: cover;">
       </div>
       <div class="collapse navbar-collapse justify-content-end" id="navigation">
         <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" rel="tooltip" title="About" data-placement="bottom" href="{% url 'user_login' %}">
+                  Home
+                </a>
+              </li>
           <li class="nav-item">
             <a class="nav-link" rel="tooltip" title="About" data-placement="bottom" href="{% url 'user_login' %}#About">
               About Game
@@ -195,15 +200,15 @@ background-size: cover;">
               </a>
               </div>
               <div class="col-md-4 mr-auto ml-auto " style="margin:1.9rem 1rem 1rem 1rem;" >
-                <a href="{% url 'user_login' %}#" target="_blank">
+                <a href="https://facebook.com/xodiagaming" target="_blank">
                   <i class="fab fa-facebook-square fa-3x" style="margin:0rem 1rem 1rem 1rem; color: #ffffff;"></i>
                 </a>
 
              <!--- <div class="col-sm-md mr-auto" style="margin:1.9rem;">--->
-                <a href="{% url 'user_login' %}#" target="_blank"><i class="fab fa-twitter-square fa-3x"  style="margin:0rem 1rem 1rem 1rem; color: #ffffff;" ></i></a>
+                <a href="https://twitter.com/pisbXOdia" target="_blank"><i class="fab fa-twitter-square fa-3x"  style="margin:0rem 1rem 1rem 1rem; color: #ffffff;" ></i></a>
 
              <!--- <div class="col-sm-md mr-auto" style="margin:1.9rem;">---->
-                <a href="{% url 'user_login' %}#" target="_blank"><i class="fab fa-instagram fa-3x"  style="margin:0rem 1rem 1rem 1rem;color: #ffffff;"></i></a>
+                <a href="https://instagram.com/pisbxodia" target="_blank"><i class="fab fa-instagram fa-3x"  style="margin:0rem 1rem 1rem 1rem;color: #ffffff;"></i></a>
               </div>
               <div class="col-md-4 mr-auto ml-auto ">
               <img src="{% static 'pisbwhite.png' %}" style="height: 3rem; width:9rem; margin:1.9rem;" >
