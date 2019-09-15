@@ -25,7 +25,7 @@ SECRET_KEY = ')o6@yp+#nb$i=pcu#m&6ayx&kbd)(vgnjfz1y)j@3w-+@xuxdy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -102,12 +102,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 PASSWORD_HASHERS = (
-        'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-        'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-        'django.contrib.auth.hashers.BCryptPasswordHasher',
-        'django.contrib.auth.hashers.SHA1PasswordHasher',
-        'django.contrib.auth.hashers.MD5PasswordHasher',
-        'django.contrib.auth.hashers.CryptPasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+    'django.contrib.auth.hashers.CryptPasswordHasher',
 )
 
 
@@ -129,3 +129,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+GOOGLE_RECAPTCHA_SECRET_KEY = '6Lfa8mkUAAAAAANpA8NKIXmOr-A2Hcgszz0gpYfA'

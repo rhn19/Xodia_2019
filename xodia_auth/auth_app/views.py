@@ -9,6 +9,10 @@ from models import User
 from .models import Profile
 from django.views.generic import View
 from django.db.utils import IntegrityError
+import urllib2
+import urllib
+import json
+from django.conf import settings
 
 # Create your views here.
 
@@ -80,6 +84,18 @@ class RegisterView(View):
             user.first_name = request.POST['first_name']
             user.last_name = request.POST['last_name']
             user.email = request.POST['email']
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            values = {
+                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response': recaptcha_response
+            }
+            data = urllib.urlencode(values)
+            req = urllib2.Request(url, data)
+            response = urllib2.urlopen(req)
+            result = json.load(response)
+            if not result['success']:
+                return render(request, self.template_name, {'error': 'Invalid Captcha'})
             user.save()
             profile.user = user
             profile.college_name = request.POST['college_name']
