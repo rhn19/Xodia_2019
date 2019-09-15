@@ -129,4 +129,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 GOOGLE_RECAPTCHA_SECRET_KEY = '6Lfa8mkUAAAAAANpA8NKIXmOr-A2Hcgszz0gpYfA'

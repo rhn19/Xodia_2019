@@ -100,6 +100,7 @@ class RegisterView(View):
             profile.user = user
             profile.college_name = request.POST['college_name']
             profile.phone_no = request.POST['phone_no']
+            profile.create_myuser()
             profile.save()
             login(request, user)
 
