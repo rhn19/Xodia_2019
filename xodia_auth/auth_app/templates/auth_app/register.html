@@ -115,7 +115,8 @@ background-size: cover;">
                    <h3 style="color: #ffff">Register</h3>
                   <div class="heading-underline" style="width: 65%;height: .2rem;background-color: #FFFFFF;margin: .8rem auto 2rem;"></div>
                 </div>
-                <form method="POST">
+                <p id="validationP" style="display: none">Password and Confirm Password Do not match</p>
+                <form method="POST" id="regForm">
                     {% csrf_token %}
                   <div class="form-group">
                     <div class="input-group input-group-alternative">
@@ -154,7 +155,7 @@ background-size: cover;">
                       <div class="input-group-prepend">
                         <span class="input-group-text"><svg class="svg-inline--fa fa-lock fa-w-14" aria-hidden="true" data-prefix="fa" data-icon="lock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"></path></svg><!-- <i class="fa fa-lock"></i> --></span>
                       </div>
-                      <input class="form-control" placeholder="Password" type="password" name="password" required>
+                      <input class="form-control" id="password" placeholder="Password" type="password" name="password" required>
                     </div>
                   </div>
                   <div class="form-group">
@@ -162,7 +163,7 @@ background-size: cover;">
                       <div class="input-group-prepend">
                         <span class="input-group-text"><svg class="svg-inline--fa fa-lock fa-w-14" aria-hidden="true" data-prefix="fa" data-icon="lock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"></path></svg><!-- <i class="fa fa-lock"></i> --></span>
                       </div>
-                      <input class="form-control" placeholder="Re-type Password" type="password" name="password2" required>
+                      <input class="form-control" id="cpassword" placeholder="Re-type Password" type="password" name="password2" required>
                     </div>
                   </div>
                    <div class="form-group">
@@ -181,11 +182,10 @@ background-size: cover;">
                       <input class="form-control" placeholder="College" type="text" name="college_name">
                     </div>
                   </div>
-
-                  <div class="text-center"><br><br>
-                    <button type="submit" class="btn bg-dimgrey">Register</button>
-                  </div>
                 </form>
+		<div class="text-center"><br><br>
+                    <button id="formSubmitButton" class="btn bg-dimgrey">Register</button>
+                  </div>
               </div>
             </div>
            </div>
@@ -264,5 +264,15 @@ background-size: cover;">
           }
         }
       });
+    </script>
+    <script>
+      document.getElementById("formSubmitButton").onclick = function(){
+        if(document.getElementById("password").value === document.getElementById("cpassword").value){
+          document.getElementById("regForm").submit();
+        }
+        else{
+          document.getElementById("validationP").style="color:red"
+        }
+      }
     </script>
 </body></html>
