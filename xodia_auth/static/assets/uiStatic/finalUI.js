@@ -9,6 +9,8 @@ var s = 350;
 var d = 300;
 var firstclick = true;
 var turn = true; //true=player1 false=player2
+var messagesStatus = document.getElementById("status");
+messagesStatus.innerHTML = "Tyragon's Turn<br>";
 var t, u;
 var w, r;
 var p = [];
@@ -27,7 +29,7 @@ class token {
     this.m = m;
     this.n = n;
     this.color = color;
-    this.val=0
+    this.val = 0;
   }
   draw() {
     let image = new Image();
@@ -39,9 +41,8 @@ class token {
     c.drawImage(image, this.m - 24.5, this.n - 24.5, 49, 49);
     c.beginPath();
     c.arc(this.m, this.n, 20, 0, 2 * Math.PI);
-    c.fillStyle = 'rgba(255,255,255,'+ this.val.toString() +')'
-    c.fill(); 
-
+    c.fillStyle = "rgba(255,255,255," + this.val.toString() + ")";
+    c.fill();
   }
 }
 
@@ -113,9 +114,9 @@ function create_board() {
   c.fillText("e", s - 140, d + 193.2);
   c.fillText("f", s - 115, d + 236.5);
   c.fillText("g", s - 90, d + 279.8);
-  c.fillText("1", s + mov, d + 349.8 -8);
-  c.fillText("2", s + 50 + mov, d + 349.8 -8);
-  c.fillText("3", s + 100 + mov, d + 349.8 -8);
+  c.fillText("1", s + mov, d + 349.8 - 8);
+  c.fillText("2", s + 50 + mov, d + 349.8 - 8);
+  c.fillText("3", s + 100 + mov, d + 349.8 - 8);
   c.fillText("4", s + 150 + mov, d + 340);
   c.fillText("5", s + 210, d + 289.8);
   c.fillText("6", s + 235, d + 246.5);
@@ -177,13 +178,13 @@ function create_board() {
     c.stroke();
   }
 
-  for(var i=0;i<4;i++){
+  for (var i = 0; i < 4; i++) {
     c.beginPath();
-    c.arc(s+i*50,d - eliminatePosY1, 20, 0, Math.PI * 2);
+    c.arc(s + i * 50, d - eliminatePosY1, 20, 0, Math.PI * 2);
     c.strokeStyle = "white";
     c.stroke();
     c.beginPath();
-    c.arc(s+i*50,d + 260 + eliminatePosY2, 20, 0, Math.PI * 2);
+    c.arc(s + i * 50, d + 260 + eliminatePosY2, 20, 0, Math.PI * 2);
     c.strokeStyle = "white";
     c.stroke();
   }
@@ -231,7 +232,7 @@ function showcoords(event) {
   var y = event.clientY;
   console.log("Mouse Click Position: ", x, y);
 
-  if(!gameOver){
+  if (!gameOver) {
     if (firstclick === true) {
       t = check(x, y); //Get Selected Token
       if (t != undefined) {
@@ -239,6 +240,7 @@ function showcoords(event) {
           firstclick = false;
           //Highlight t
           console.log("Token 1 Selected: ", t);
+          messagesStatus.innerHTML += "Token 1 Selected<br>";
           t.val = 0.3;
         }
       }
@@ -252,20 +254,21 @@ function showcoords(event) {
           firstclick = true;
           //Remove Highlight
           console.log("Token 2 Selected: ", u);
+          messagesStatus.innerHTML += "Token 2 Selected<br>";
           move(t, u);
-  
+
           //Score
           console.log("PLAYERS' SCORES");
           console.log("BLUE SCORE", c2);
           console.log("RED SCORE", c1);
           if (c2 >= 4) {
             alert("Blue Wins");
-            gameOver = true
+            gameOver = true;
           } else if (c1 >= 4) {
             alert("Red Wins");
-            gameOver = true
+            gameOver = true;
           }
-          t.val=0
+          t.val = 0;
         }
       }
     }
@@ -276,9 +279,15 @@ function getXUpperlimit(y) {
   //Returns X Upper Limit for a given Y
   if (Math.ceil(y) === Math.ceil(d) || Math.ceil(y) === Math.ceil(d + 259.8)) {
     return s + 150;
-  } else if (Math.ceil(y) === Math.ceil(d + 43.3) || Math.ceil(y) === Math.ceil(d + 216.5)) {
+  } else if (
+    Math.ceil(y) === Math.ceil(d + 43.3) ||
+    Math.ceil(y) === Math.ceil(d + 216.5)
+  ) {
     return s + 175;
-  } else if (Math.ceil(y) === Math.ceil(d + 86.6) || Math.ceil(y) === Math.ceil(d + 173.2)) {
+  } else if (
+    Math.ceil(y) === Math.ceil(d + 86.6) ||
+    Math.ceil(y) === Math.ceil(d + 173.2)
+  ) {
     return s + 200;
   } else if (Math.ceil(y) === Math.ceil(d + 129.9)) {
     return s + 225;
@@ -291,14 +300,28 @@ function getXLowerlimit(y) {
   //Returns X Lower Limit for a given y
   if (Math.ceil(y) === Math.ceil(d) || Math.ceil(y) === Math.ceil(d + 259.8)) {
     return s;
-  } else if (Math.ceil(y) === Math.ceil(d + 43.3) || Math.ceil(y) === Math.ceil(d + 216.5)) {
+  } else if (
+    Math.ceil(y) === Math.ceil(d + 43.3) ||
+    Math.ceil(y) === Math.ceil(d + 216.5)
+  ) {
     return s - 25;
-  } else if (Math.ceil(y) === Math.ceil(d + 86.6) || Math.ceil(y) === Math.ceil(d + 173.2)) {
+  } else if (
+    Math.ceil(y) === Math.ceil(d + 86.6) ||
+    Math.ceil(y) === Math.ceil(d + 173.2)
+  ) {
     return s - 50;
   } else if (Math.ceil(y) === Math.ceil(d + 129.9)) {
     return s - 75;
   } else {
     return s - 75;
+  }
+}
+
+function printTurn(t) {
+  if (t) {
+    messagesStatus.innerHTML = "Tyragon's Turn<br>";
+  } else {
+    messagesStatus.innerHTML = "Abagon's Turn<br>";
   }
 }
 
@@ -325,8 +348,10 @@ function move(t1, t2) {
         t1.m = t2.m;
         t2.m = t2.m + 50;
         turn = !turn;
+        printTurn(turn);
       } else {
         console.log("Invalid Move! Please Try Again");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
     } else {
       //Check if token found can be pushed
@@ -351,8 +376,10 @@ function move(t1, t2) {
         t1.m = t2.m;
         t2.m = t2.m - 50;
         turn = !turn;
+        printTurn(turn);
       } else {
         console.log("Invalid Move! Please Try Again");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
     } else {
       //Check if token found can be pushed
@@ -374,24 +401,26 @@ function move(t1, t2) {
     }
     if (count === 0) {
       //No token ahead of t2 => move t1,t2
-      if ((Math.ceil(t2.n)>=Math.ceil(d + 129.9) && t2.m < getXUpperlimit(Math.ceil(t2.n))  && Math.ceil(t2.n)<Math.ceil(d + 259.8))
-          ||Math.ceil(t2.n)<Math.ceil(d + 129.9)) {
+      if (
+        (Math.ceil(t2.n) >= Math.ceil(d + 129.9) &&
+          t2.m < getXUpperlimit(Math.ceil(t2.n)) &&
+          Math.ceil(t2.n) < Math.ceil(d + 259.8)) ||
+        Math.ceil(t2.n) < Math.ceil(d + 129.9)
+      ) {
         t1.m = t2.m;
         t1.n = t2.n;
         t2.m = t2.m + 25;
         t2.n = t2.n + 43.3;
         turn = !turn;
-      } 
-      else{
+        printTurn(turn);
+      } else {
         console.log("Invalid Move! Please Try Again");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-    } 
-    else {
+    } else {
       valid2(t1, t2, pass, "diagonalDownRight");
     }
-  } 
-  
-  else if (t2.m === t1.m - 25 && Math.ceil(t2.n) === Math.ceil(t1.n + 43.3)) {
+  } else if (t2.m === t1.m - 25 && Math.ceil(t2.n) === Math.ceil(t1.n + 43.3)) {
     //Diagonal Down Left
     for (i = 0; i < 11; i++) {
       //Checking if there is a token in front of t2
@@ -400,30 +429,32 @@ function move(t1, t2) {
           Math.ceil(p[i].n) === Math.ceil(t2.n + 43.3)) ||
         (p2[i].m === t2.m - 25 && Math.ceil(p2[i].n) === Math.ceil(t2.n + 43.3))
       ) {
-        count=1;
+        count = 1;
         pass = i;
         break;
       }
     }
     if (count === 0) {
-      if ((Math.ceil(t2.n)>=Math.ceil(d + 129.9) && t2.m > getXLowerlimit(Math.ceil(t2.n)) && Math.ceil(t2.n)<Math.ceil(d + 259.8)) 
-          || Math.ceil(t2.n)<Math.ceil(d + 129.9)) {
+      if (
+        (Math.ceil(t2.n) >= Math.ceil(d + 129.9) &&
+          t2.m > getXLowerlimit(Math.ceil(t2.n)) &&
+          Math.ceil(t2.n) < Math.ceil(d + 259.8)) ||
+        Math.ceil(t2.n) < Math.ceil(d + 129.9)
+      ) {
         t1.m = t2.m;
         t1.n = t2.n;
         t2.m = t2.m - 25;
         t2.n = t2.n + 43.3;
         turn = !turn;
-      } 
-      else {
-        console.log("Invalid Move! Please Try Again!")
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-    } 
-    else {
+    } else {
       valid2(t1, t2, pass, "diagonalDownLeft");
     }
-  } 
-  
-  else if (t2.m === t1.m + 25 && Math.ceil(t2.n) === Math.ceil(t1.n - 43.3)) {
+  } else if (t2.m === t1.m + 25 && Math.ceil(t2.n) === Math.ceil(t1.n - 43.3)) {
     // Diagonal Up Right
     for (i = 0; i < 11; i++) {
       if (
@@ -431,30 +462,32 @@ function move(t1, t2) {
           Math.ceil(p[i].n) === Math.ceil(t2.n - 43.3)) ||
         (p2[i].m === t2.m + 25 && Math.ceil(p2[i].n) === Math.ceil(t2.n - 43.3))
       ) {
-        count=1;
+        count = 1;
         pass = i;
         break;
       }
     }
     if (count === 0) {
-      if ((Math.ceil(t2.n)<=Math.ceil(d + 129.9) && t2.m < getXUpperlimit(Math.ceil(t2.n)) && Math.ceil(t2.n)>Math.ceil(d)) 
-          ||  Math.ceil(t2.n)>Math.ceil(d + 129.9)) {
+      if (
+        (Math.ceil(t2.n) <= Math.ceil(d + 129.9) &&
+          t2.m < getXUpperlimit(Math.ceil(t2.n)) &&
+          Math.ceil(t2.n) > Math.ceil(d)) ||
+        Math.ceil(t2.n) > Math.ceil(d + 129.9)
+      ) {
         t1.m = t2.m;
         t1.n = t2.n;
         t2.m = t2.m + 25;
         t2.n = t2.n - 43.3;
         turn = !turn;
-      } 
-      else{
-        console.log("Invalid Move! Please Try Again!")
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-    } 
-    else {
+    } else {
       valid2(t1, t2, pass, "diagonalUpRight");
     }
-  } 
-  
-  else if (t1.m === t2.m + 25 && Math.ceil(t2.n) === Math.ceil(t1.n - 43.3)) {
+  } else if (t1.m === t2.m + 25 && Math.ceil(t2.n) === Math.ceil(t1.n - 43.3)) {
     //Diagonal Up Left
     for (i = 0; i < 11; i++) {
       if (
@@ -468,34 +501,42 @@ function move(t1, t2) {
       }
     }
     if (count === 0) {
-      if ((Math.ceil(t2.n)<=Math.ceil(d + 129.9) && t2.m > getXLowerlimit(Math.ceil(t2.n)) && Math.ceil(t2.n)>Math.ceil(d)) 
-          || Math.ceil(t2.n)>Math.ceil(d + 129.9)) {
+      if (
+        (Math.ceil(t2.n) <= Math.ceil(d + 129.9) &&
+          t2.m > getXLowerlimit(Math.ceil(t2.n)) &&
+          Math.ceil(t2.n) > Math.ceil(d)) ||
+        Math.ceil(t2.n) > Math.ceil(d + 129.9)
+      ) {
         t1.m = t2.m;
         t1.n = t2.n;
         t2.m = t2.m - 25;
         t2.n = t2.n - 43.3;
         turn = !turn;
-      } 
-      else{
-        console.log("Invalid Move! Please Try Again!")
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
     } else {
       valid2(t1, t2, pass, "diagonalUpLeft");
     }
-  }
-  else{
-    console.log("Invalid Move! Please Try Again!")
+  } else {
+    console.log("Invalid Move! Please Try Again!");
+    messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
   }
 }
 
-function confirm2(w,r) {
+function confirm2(w, r) {
   //Checks if the position w,r is empty or not
   var v = 0;
   for (var i = 0; i < 11; i++) {
-    if ((w === p[i].m && Math.ceil(r) === Math.ceil(p[i].n))||(p2[i].m === w && Math.ceil(p2[i].n) == Math.ceil(r))) {
-      v=1;
+    if (
+      (w === p[i].m && Math.ceil(r) === Math.ceil(p[i].n)) ||
+      (p2[i].m === w && Math.ceil(p2[i].n) == Math.ceil(r))
+    ) {
+      v = 1;
       break;
-    } 
+    }
   }
   if (v === 0) {
     return 1;
@@ -504,209 +545,269 @@ function confirm2(w,r) {
   }
 }
 
-function valid2(t1, t2, pushToken, moveDirection){
+function valid2(t1, t2, pushToken, moveDirection) {
   //if can eliminate
   //else if confirm
-  //else invalid      
-  if(turn){
-      
-      if(moveDirection==="horizontalRight" && t2.m+50===p2[pushToken].m && Math.ceil(t2.n) === Math.ceil(p2[pushToken].n)){
-        if(p2[pushToken].m===getXUpperlimit(p2[pushToken].n)){
-          if(Math.ceil(p2[pushToken].n) !== Math.ceil(d + 129.9)){
-            //Move and eliminate
-            t1.m = t2.m;
-            t2.m = t2.m + 50;
-            p2[pushToken].m = eliminatePosX;
-            p2[pushToken].n = d - eliminatePosY1;
-            eliminatePosX += 50;
-            c2++;
-            turn = !turn;
-            console.log("Eliminated")
-          }
-          else{
-            console.log("Invalid Move! Please Try Again! ")
-          }
-        }
-        else if(confirm2(p2[pushToken].m+50,p2[pushToken].n)){
-          //Move and push
+  //else invalid
+  if (turn) {
+    if (
+      moveDirection === "horizontalRight" &&
+      t2.m + 50 === p2[pushToken].m &&
+      Math.ceil(t2.n) === Math.ceil(p2[pushToken].n)
+    ) {
+      if (p2[pushToken].m === getXUpperlimit(p2[pushToken].n)) {
+        if (Math.ceil(p2[pushToken].n) !== Math.ceil(d + 129.9)) {
+          //Move and eliminate
           t1.m = t2.m;
-          t2.m = p2[pushToken].m;
-          p2[pushToken].m = p2[pushToken].m + 50;
+          t2.m = t2.m + 50;
+          p2[pushToken].m = eliminatePosX;
+          p2[pushToken].n = d - eliminatePosY1;
+          eliminatePosX += 50;
+          c2++;
           turn = !turn;
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated!<br>";
+        } else {
+          console.log("Invalid Move! Please Try Again! ");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
         }
-        else{
-          console.log("Invalid Move! Please Try Again!")
-        }
+      } else if (confirm2(p2[pushToken].m + 50, p2[pushToken].n)) {
+        //Move and push
+        t1.m = t2.m;
+        t2.m = p2[pushToken].m;
+        p2[pushToken].m = p2[pushToken].m + 50;
+        turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else if(moveDirection==="horizontalLeft" && t2.m-50===p2[pushToken].m && Math.ceil(t2.n) === Math.ceil(p2[pushToken].n)){
-        if(p2[pushToken].m===getXLowerlimit(p2[pushToken].n)){
-          if(Math.ceil(p2[pushToken].n) !== Math.ceil(d + 129.9)){
-            //Move and eliminate
-            t1.m = t2.m;
-            t2.m = t2.m - 50;
-            p2[pushToken].m = eliminatePosX;
-            p2[pushToken].n = d - eliminatePosY1;
-            eliminatePosX += 50;
-            c2++;
-            turn = !turn;
-            console.log("Eliminated")
-          }
-          else{
-            console.log("Invalid Move! Please Try Again! ")
-          }
-        }
-        else if(confirm2(p2[pushToken].m-50,p2[pushToken].n)){
-          //Move and push
+    } else if (
+      moveDirection === "horizontalLeft" &&
+      t2.m - 50 === p2[pushToken].m &&
+      Math.ceil(t2.n) === Math.ceil(p2[pushToken].n)
+    ) {
+      if (p2[pushToken].m === getXLowerlimit(p2[pushToken].n)) {
+        if (Math.ceil(p2[pushToken].n) !== Math.ceil(d + 129.9)) {
+          //Move and eliminate
           t1.m = t2.m;
-          t2.m = p2[pushToken].m;
-          p2[pushToken].m = p2[pushToken].m - 50;
+          t2.m = t2.m - 50;
+          p2[pushToken].m = eliminatePosX;
+          p2[pushToken].n = d - eliminatePosY1;
+          eliminatePosX += 50;
+          c2++;
           turn = !turn;
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated!<br>";
+        } else {
+          console.log("Invalid Move! Please Try Again! ");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
         }
-        else{
-          console.log("Invalid Move! Please Try Again!")
-        }
+      } else if (confirm2(p2[pushToken].m - 50, p2[pushToken].n)) {
+        //Move and push
+        t1.m = t2.m;
+        t2.m = p2[pushToken].m;
+        p2[pushToken].m = p2[pushToken].m - 50;
+        turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else if(moveDirection==="diagonalDownRight" && t2.m+25===p2[pushToken].m && Math.ceil(t2.n+43.3) === Math.ceil(p2[pushToken].n)){
-        if((p2[pushToken].m===getXUpperlimit(p2[pushToken].n) && Math.ceil(p2[pushToken].n)>=Math.ceil(d+129.9)) || Math.ceil(p2[pushToken].n)===Math.ceil(d + 259.8)){
-          if(p2[pushToken].m===s+150 && Math.ceil(p2[pushToken].n)===Math.ceil(d+259.8)){
-            console.log("Invalid Move! Please Try Again!")
-          }
-          else{
-            //Move and eliminate
-            t1.m = t2.m;
-            t1.n = t2.n;
-            t2.m = t2.m + 25;
-            t2.n = t2.n + 43.3;
-            p2[pushToken].m = eliminatePosX;
-            p2[pushToken].n = d - eliminatePosY1;
-            eliminatePosX += 50;
-            c2++;
-            turn = !turn;
-            console.log("Eliminated")
-          }
-        }
-        else if(confirm2(p2[pushToken].m+25,p2[pushToken].n+43.3)){
-          //Move and push
-          t1.m = t2.m;
-          t1.n = t2.n;
-          t2.m = p2[pushToken].m
-          t2.n = p2[pushToken].n
-          p2[pushToken].m = p2[pushToken].m + 25;
-          p2[pushToken].n = p2[pushToken].n + 43.3;
-          turn = !turn;
-        }
-        else{
-          console.log("Invalid Move! Please Try Again!")
-        }
-      }
-      else if(moveDirection==="diagonalDownLeft" && t2.m-25===p2[pushToken].m && Math.ceil(t2.n+43.3) === Math.ceil(p2[pushToken].n)){
-        if((p2[pushToken].m===getXLowerlimit(p2[pushToken].n) && Math.ceil(p2[pushToken].n)>=Math.ceil(d+129.9)) || Math.ceil(p2[pushToken].n)===Math.ceil(d + 259.8)){
-          if(p2[pushToken].m===s && Math.ceil(p2[pushToken].n)===Math.ceil(d+259.8)){
-            console.log("Invalid Move! Please Try Again!")
-          }
-          else{
-            //Move and eliminate
-            t1.m = t2.m;
-            t1.n = t2.n;
-            t2.m = t2.m - 25;
-            t2.n = t2.n + 43.3;
-            p2[pushToken].m = eliminatePosX;
-            p2[pushToken].n = d - eliminatePosY1;
-            eliminatePosX += 50;
-            c2++;
-            turn = !turn;
-            console.log("Eliminated")
-          }
-        }
-        else if(confirm2(p2[pushToken].m-25,p2[pushToken].n+43.3)){
-          //Move and push
+    } else if (
+      moveDirection === "diagonalDownRight" &&
+      t2.m + 25 === p2[pushToken].m &&
+      Math.ceil(t2.n + 43.3) === Math.ceil(p2[pushToken].n)
+    ) {
+      if (
+        (p2[pushToken].m === getXUpperlimit(p2[pushToken].n) &&
+          Math.ceil(p2[pushToken].n) >= Math.ceil(d + 129.9)) ||
+        Math.ceil(p2[pushToken].n) === Math.ceil(d + 259.8)
+      ) {
+        if (
+          p2[pushToken].m === s + 150 &&
+          Math.ceil(p2[pushToken].n) === Math.ceil(d + 259.8)
+        ) {
+          console.log("Invalid Move! Please Try Again!");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+        } else {
+          //Move and eliminate
           t1.m = t2.m;
           t1.n = t2.n;
-          t2.m = p2[pushToken].m
-          t2.n = p2[pushToken].n
-          p2[pushToken].m = p2[pushToken].m - 25;
-          p2[pushToken].n = p2[pushToken].n + 43.3;
+          t2.m = t2.m + 25;
+          t2.n = t2.n + 43.3;
+          p2[pushToken].m = eliminatePosX;
+          p2[pushToken].n = d - eliminatePosY1;
+          eliminatePosX += 50;
+          c2++;
           turn = !turn;
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated!<br>";
         }
-        else{
-          console.log("Invalid Move! Please Try Again!")
-        }
+      } else if (confirm2(p2[pushToken].m + 25, p2[pushToken].n + 43.3)) {
+        //Move and push
+        t1.m = t2.m;
+        t1.n = t2.n;
+        t2.m = p2[pushToken].m;
+        t2.n = p2[pushToken].n;
+        p2[pushToken].m = p2[pushToken].m + 25;
+        p2[pushToken].n = p2[pushToken].n + 43.3;
+        turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else if(moveDirection==="diagonalUpRight" && t2.m+25===p2[pushToken].m && Math.ceil(t2.n-43.3) === Math.ceil(p2[pushToken].n)){
-        if((p2[pushToken].m===getXUpperlimit(p2[pushToken].n) && Math.ceil(p2[pushToken].n)<=Math.ceil(d+129.9)) || Math.ceil(p2[pushToken].n)===Math.ceil(d)){
-          if(p2[pushToken].m===s+150 && Math.ceil(p2[pushToken].n)===Math.ceil(d)){
-            console.log("Invalid Move! Please Try Again!")
-          }
-          else{
-            //Move and eliminate
-            t1.m = t2.m;
-            t1.n = t2.n;
-            t2.m = t2.m + 25;
-            t2.n = t2.n - 43.3;
-            p2[pushToken].m = eliminatePosX;
-            p2[pushToken].n = d - eliminatePosY1;
-            eliminatePosX += 50;
-            c2++;
-            turn = !turn;
-            console.log("Eliminated")
-          }
-        }
-        else if(confirm2(p2[pushToken].m+25,p2[pushToken].n-43.3)){
-          //Move and push
+    } else if (
+      moveDirection === "diagonalDownLeft" &&
+      t2.m - 25 === p2[pushToken].m &&
+      Math.ceil(t2.n + 43.3) === Math.ceil(p2[pushToken].n)
+    ) {
+      if (
+        (p2[pushToken].m === getXLowerlimit(p2[pushToken].n) &&
+          Math.ceil(p2[pushToken].n) >= Math.ceil(d + 129.9)) ||
+        Math.ceil(p2[pushToken].n) === Math.ceil(d + 259.8)
+      ) {
+        if (
+          p2[pushToken].m === s &&
+          Math.ceil(p2[pushToken].n) === Math.ceil(d + 259.8)
+        ) {
+          console.log("Invalid Move! Please Try Again!");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+        } else {
+          //Move and eliminate
           t1.m = t2.m;
           t1.n = t2.n;
-          t2.m = p2[pushToken].m
-          t2.n = p2[pushToken].n
-          p2[pushToken].m = p2[pushToken].m + 25;
-          p2[pushToken].n = p2[pushToken].n - 43.3;
+          t2.m = t2.m - 25;
+          t2.n = t2.n + 43.3;
+          p2[pushToken].m = eliminatePosX;
+          p2[pushToken].n = d - eliminatePosY1;
+          eliminatePosX += 50;
+          c2++;
           turn = !turn;
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated!<br>";
         }
-        else{
-          console.log("Invalid Move! Please Try Again!")
-        }
+      } else if (confirm2(p2[pushToken].m - 25, p2[pushToken].n + 43.3)) {
+        //Move and push
+        t1.m = t2.m;
+        t1.n = t2.n;
+        t2.m = p2[pushToken].m;
+        t2.n = p2[pushToken].n;
+        p2[pushToken].m = p2[pushToken].m - 25;
+        p2[pushToken].n = p2[pushToken].n + 43.3;
+        turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else if(moveDirection==="diagonalUpLeft" && t2.m-25===p2[pushToken].m && Math.ceil(t2.n-43.3) === Math.ceil(p2[pushToken].n)){
-        if((p2[pushToken].m===getXLowerlimit(p2[pushToken].n) && Math.ceil(p2[pushToken].n)<=Math.ceil(d+129.9)) || Math.ceil(p2[pushToken].n)===Math.ceil(d)){
-          if(p2[pushToken].m===s && Math.ceil(p2[pushToken].n)===Math.ceil(d)){
-            console.log("Invalid Move! Please Try Again!")
-          }
-          else{
-            //Move and eliminate
-            t1.m = t2.m;
-            t1.n = t2.n;
-            t2.m = t2.m - 25;
-            t2.n = t2.n - 43.3;
-            p2[pushToken].m = eliminatePosX;
-            p2[pushToken].n = d - eliminatePosY1;
-            eliminatePosX += 50;
-            c2++;
-            turn = !turn;
-            console.log("Eliminated")
-          }
-        }
-        else if(confirm2(p2[pushToken].m-25,p2[pushToken].n-43.3)){
-          //Move and push
+    } else if (
+      moveDirection === "diagonalUpRight" &&
+      t2.m + 25 === p2[pushToken].m &&
+      Math.ceil(t2.n - 43.3) === Math.ceil(p2[pushToken].n)
+    ) {
+      if (
+        (p2[pushToken].m === getXUpperlimit(p2[pushToken].n) &&
+          Math.ceil(p2[pushToken].n) <= Math.ceil(d + 129.9)) ||
+        Math.ceil(p2[pushToken].n) === Math.ceil(d)
+      ) {
+        if (
+          p2[pushToken].m === s + 150 &&
+          Math.ceil(p2[pushToken].n) === Math.ceil(d)
+        ) {
+          console.log("Invalid Move! Please Try Again!");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+        } else {
+          //Move and eliminate
           t1.m = t2.m;
           t1.n = t2.n;
-          t2.m = p2[pushToken].m
-          t2.n = p2[pushToken].n
-          p2[pushToken].m = p2[pushToken].m - 25;
-          p2[pushToken].n = p2[pushToken].n - 43.3;
+          t2.m = t2.m + 25;
+          t2.n = t2.n - 43.3;
+          p2[pushToken].m = eliminatePosX;
+          p2[pushToken].n = d - eliminatePosY1;
+          eliminatePosX += 50;
+          c2++;
           turn = !turn;
-          
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated!<br>";
         }
-        else{
-          console.log("Invalid Move! Please Try Again!")
+      } else if (confirm2(p2[pushToken].m + 25, p2[pushToken].n - 43.3)) {
+        //Move and push
+        t1.m = t2.m;
+        t1.n = t2.n;
+        t2.m = p2[pushToken].m;
+        t2.n = p2[pushToken].n;
+        p2[pushToken].m = p2[pushToken].m + 25;
+        p2[pushToken].n = p2[pushToken].n - 43.3;
+        turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+      }
+    } else if (
+      moveDirection === "diagonalUpLeft" &&
+      t2.m - 25 === p2[pushToken].m &&
+      Math.ceil(t2.n - 43.3) === Math.ceil(p2[pushToken].n)
+    ) {
+      if (
+        (p2[pushToken].m === getXLowerlimit(p2[pushToken].n) &&
+          Math.ceil(p2[pushToken].n) <= Math.ceil(d + 129.9)) ||
+        Math.ceil(p2[pushToken].n) === Math.ceil(d)
+      ) {
+        if (
+          p2[pushToken].m === s &&
+          Math.ceil(p2[pushToken].n) === Math.ceil(d)
+        ) {
+          console.log("Invalid Move! Please Try Again!");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+        } else {
+          //Move and eliminate
+          t1.m = t2.m;
+          t1.n = t2.n;
+          t2.m = t2.m - 25;
+          t2.n = t2.n - 43.3;
+          p2[pushToken].m = eliminatePosX;
+          p2[pushToken].n = d - eliminatePosY1;
+          eliminatePosX += 50;
+          c2++;
+          turn = !turn;
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated!<br>";
         }
+      } else if (confirm2(p2[pushToken].m - 25, p2[pushToken].n - 43.3)) {
+        //Move and push
+        t1.m = t2.m;
+        t1.n = t2.n;
+        t2.m = p2[pushToken].m;
+        t2.n = p2[pushToken].n;
+        p2[pushToken].m = p2[pushToken].m - 25;
+        p2[pushToken].n = p2[pushToken].n - 43.3;
+        turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else{
-        console.log("Invalid Move! Please Try Again!")
-      }
-  }
-  else{
-    if(moveDirection==="horizontalRight" && t2.m+50===p[pushToken].m && Math.ceil(t2.n) === Math.ceil(p[pushToken].n)){
-      if(p[pushToken].m===getXUpperlimit(p[pushToken].n)){
-        if(p[pushToken].n !== Math.ceil(d + 129.9)){
+    } else {
+      console.log("Invalid Move! Please Try Again!");
+      messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+    }
+  } else {
+    if (
+      moveDirection === "horizontalRight" &&
+      t2.m + 50 === p[pushToken].m &&
+      Math.ceil(t2.n) === Math.ceil(p[pushToken].n)
+    ) {
+      if (p[pushToken].m === getXUpperlimit(p[pushToken].n)) {
+        if (p[pushToken].n !== Math.ceil(d + 129.9)) {
           //Move and eliminate
           t1.m = t2.m;
           t2.m = t2.m + 50;
@@ -715,26 +816,31 @@ function valid2(t1, t2, pushToken, moveDirection){
           eliminatePosX2 += 50;
           c1++;
           turn = !turn;
-          console.log("Eliminated")
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated<br>";
+        } else {
+          console.log("Invalid Move! Please Try Again! ");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
         }
-        else{
-          console.log("Invalid Move! Please Try Again! ")
-        }
-      }
-      else if(confirm2(p[pushToken].m+50,p[pushToken].n)){
+      } else if (confirm2(p[pushToken].m + 50, p[pushToken].n)) {
         //Move and push
         t1.m = t2.m;
         t2.m = p[pushToken].m;
         p[pushToken].m = p[pushToken].m + 50;
         turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else{
-        console.log("Invalid Move! Please Try Again!")
-      }
-    }
-    else if(moveDirection==="horizontalLeft" && t2.m-50===p[pushToken].m && Math.ceil(t2.n) === Math.ceil(p[pushToken].n)){
-      if(p[pushToken].m===getXLowerlimit(p[pushToken].n)){
-        if(p[pushToken].n !== Math.ceil(d + 129.9)){
+    } else if (
+      moveDirection === "horizontalLeft" &&
+      t2.m - 50 === p[pushToken].m &&
+      Math.ceil(t2.n) === Math.ceil(p[pushToken].n)
+    ) {
+      if (p[pushToken].m === getXLowerlimit(p[pushToken].n)) {
+        if (p[pushToken].n !== Math.ceil(d + 129.9)) {
           //Move and eliminate
           t1.m = t2.m;
           t2.m = t2.m - 50;
@@ -743,29 +849,41 @@ function valid2(t1, t2, pushToken, moveDirection){
           eliminatePosX2 += 50;
           c1++;
           turn = !turn;
-          console.log("Eliminated")
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated!<br>";
+        } else {
+          console.log("Invalid Move! Please Try Again! ");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
         }
-        else{
-          console.log("Invalid Move! Please Try Again! ")
-        }
-      }
-      else if(confirm2(p[pushToken].m-50,p[pushToken].n)){
+      } else if (confirm2(p[pushToken].m - 50, p[pushToken].n)) {
         //Move and push
         t1.m = t2.m;
         t2.m = p[pushToken].m;
         p[pushToken].m = p[pushToken].m - 50;
         turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else{
-        console.log("Invalid Move! Please Try Again!")
-      }
-    }
-    else if(moveDirection==="diagonalDownRight" && t2.m+25===p[pushToken].m && Math.ceil(t2.n+43.3) === Math.ceil(p[pushToken].n)){
-      if((p[pushToken].m===getXUpperlimit(p[pushToken].n) && Math.ceil(p[pushToken].n)>=Math.ceil(d+129.9)) || Math.ceil(p[pushToken].n)===Math.ceil(d + 259.8)){
-        if(p[pushToken].m===s+150 && Math.ceil(p[pushToken].n)===Math.ceil(d+259.8)){
-          console.log("Invalid Move! Please Try Again!")
-        }
-        else{
+    } else if (
+      moveDirection === "diagonalDownRight" &&
+      t2.m + 25 === p[pushToken].m &&
+      Math.ceil(t2.n + 43.3) === Math.ceil(p[pushToken].n)
+    ) {
+      if (
+        (p[pushToken].m === getXUpperlimit(p[pushToken].n) &&
+          Math.ceil(p[pushToken].n) >= Math.ceil(d + 129.9)) ||
+        Math.ceil(p[pushToken].n) === Math.ceil(d + 259.8)
+      ) {
+        if (
+          p[pushToken].m === s + 150 &&
+          Math.ceil(p[pushToken].n) === Math.ceil(d + 259.8)
+        ) {
+          console.log("Invalid Move! Please Try Again!");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+        } else {
           //Move and eliminate
           t1.m = t2.m;
           t1.n = t2.n;
@@ -776,29 +894,41 @@ function valid2(t1, t2, pushToken, moveDirection){
           eliminatePosX2 += 50;
           c1++;
           turn = !turn;
-          console.log("Eliminated")
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated!<br>";
         }
-      }
-      else if(confirm2(p[pushToken].m+25,p[pushToken].n+43.3)){
+      } else if (confirm2(p[pushToken].m + 25, p[pushToken].n + 43.3)) {
         //Move and push
         t1.m = t2.m;
         t1.n = t2.n;
-        t2.m = p[pushToken].m
-        t2.n = p[pushToken].n
+        t2.m = p[pushToken].m;
+        t2.n = p[pushToken].n;
         p[pushToken].m = p[pushToken].m + 25;
         p[pushToken].n = p[pushToken].n + 43.3;
         turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else{
-        console.log("Invalid Move! Please Try Again!")
-      }
-    }
-    else if(moveDirection==="diagonalDownLeft" && t2.m-25===p[pushToken].m && Math.ceil(t2.n+43.3) === Math.ceil(p[pushToken].n)){
-      if((p[pushToken].m===getXLowerlimit(p[pushToken].n) && Math.ceil(p[pushToken].n)>=Math.ceil(d+129.9)) || Math.ceil(p[pushToken].n)===Math.ceil(d + 259.8)){
-        if(p[pushToken].m===s && Math.ceil(p[pushToken].n)===Math.ceil(d+259.8)){
-          console.log("Invalid Move! Please Try Again!")
-        }
-        else{
+    } else if (
+      moveDirection === "diagonalDownLeft" &&
+      t2.m - 25 === p[pushToken].m &&
+      Math.ceil(t2.n + 43.3) === Math.ceil(p[pushToken].n)
+    ) {
+      if (
+        (p[pushToken].m === getXLowerlimit(p[pushToken].n) &&
+          Math.ceil(p[pushToken].n) >= Math.ceil(d + 129.9)) ||
+        Math.ceil(p[pushToken].n) === Math.ceil(d + 259.8)
+      ) {
+        if (
+          p[pushToken].m === s &&
+          Math.ceil(p[pushToken].n) === Math.ceil(d + 259.8)
+        ) {
+          console.log("Invalid Move! Please Try Again!");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+        } else {
           //Move and eliminate
           t1.m = t2.m;
           t1.n = t2.n;
@@ -809,29 +939,41 @@ function valid2(t1, t2, pushToken, moveDirection){
           eliminatePosX2 += 50;
           c1++;
           turn = !turn;
-          console.log("Eliminated")
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated!<br>";
         }
-      }
-      else if(confirm2(p[pushToken].m-25,p[pushToken].n+43.3)){
+      } else if (confirm2(p[pushToken].m - 25, p[pushToken].n + 43.3)) {
         //Move and push
         t1.m = t2.m;
         t1.n = t2.n;
-        t2.m = p[pushToken].m
-        t2.n = p[pushToken].n
+        t2.m = p[pushToken].m;
+        t2.n = p[pushToken].n;
         p[pushToken].m = p[pushToken].m - 25;
         p[pushToken].n = p[pushToken].n + 43.3;
         turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else{
-        console.log("Invalid Move! Please Try Again!")
-      }
-    }
-    else if(moveDirection==="diagonalUpRight" && t2.m+25===p[pushToken].m && Math.ceil(t2.n-43.3) === Math.ceil(p[pushToken].n)){
-      if((p[pushToken].m===getXUpperlimit(p[pushToken].n) && Math.ceil(p[pushToken].n)<=Math.ceil(d+129.9)) || Math.ceil(p[pushToken].n)===Math.ceil(d)){
-        if(p[pushToken].m===s+150 && Math.ceil(p[pushToken].n)===Math.ceil(d)){
-          console.log("Invalid Move! Please Try Again!")
-        }
-        else{
+    } else if (
+      moveDirection === "diagonalUpRight" &&
+      t2.m + 25 === p[pushToken].m &&
+      Math.ceil(t2.n - 43.3) === Math.ceil(p[pushToken].n)
+    ) {
+      if (
+        (p[pushToken].m === getXUpperlimit(p[pushToken].n) &&
+          Math.ceil(p[pushToken].n) <= Math.ceil(d + 129.9)) ||
+        Math.ceil(p[pushToken].n) === Math.ceil(d)
+      ) {
+        if (
+          p[pushToken].m === s + 150 &&
+          Math.ceil(p[pushToken].n) === Math.ceil(d)
+        ) {
+          console.log("Invalid Move! Please Try Again!");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+        } else {
           //Move and eliminate
           t1.m = t2.m;
           t1.n = t2.n;
@@ -842,29 +984,41 @@ function valid2(t1, t2, pushToken, moveDirection){
           eliminatePosX2 += 50;
           c1++;
           turn = !turn;
-          console.log("Eliminated")
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated<br>";
         }
-      }
-      else if(confirm2(p[pushToken].m+25,p[pushToken].n-43.3)){
+      } else if (confirm2(p[pushToken].m + 25, p[pushToken].n - 43.3)) {
         //Move and push
         t1.m = t2.m;
         t1.n = t2.n;
-        t2.m = p[pushToken].m
-        t2.n = p[pushToken].n
+        t2.m = p[pushToken].m;
+        t2.n = p[pushToken].n;
         p[pushToken].m = p[pushToken].m + 25;
         p[pushToken].n = p[pushToken].n - 43.3;
         turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else{
-        console.log("Invalid Move! Please Try Again!")
-      }
-    }
-    else if(moveDirection==="diagonalUpLeft" && t2.m-25===p[pushToken].m && Math.ceil(t2.n-43.3) === Math.ceil(p[pushToken].n)){
-      if((p[pushToken].m===getXLowerlimit(p[pushToken].n) && Math.ceil(p[pushToken].n)<=Math.ceil(d+129.9)) || Math.ceil(p[pushToken].n)===Math.ceil(d)){
-        if(p[pushToken].m===s && Math.ceil(p[pushToken].n)===Math.ceil(d)){
-          console.log("Invalid Move! Please Try Again!")
-        }
-        else{
+    } else if (
+      moveDirection === "diagonalUpLeft" &&
+      t2.m - 25 === p[pushToken].m &&
+      Math.ceil(t2.n - 43.3) === Math.ceil(p[pushToken].n)
+    ) {
+      if (
+        (p[pushToken].m === getXLowerlimit(p[pushToken].n) &&
+          Math.ceil(p[pushToken].n) <= Math.ceil(d + 129.9)) ||
+        Math.ceil(p[pushToken].n) === Math.ceil(d)
+      ) {
+        if (
+          p[pushToken].m === s &&
+          Math.ceil(p[pushToken].n) === Math.ceil(d)
+        ) {
+          console.log("Invalid Move! Please Try Again!");
+          messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
+        } else {
           //Move and eliminate
           t1.m = t2.m;
           t1.n = t2.n;
@@ -875,26 +1029,27 @@ function valid2(t1, t2, pushToken, moveDirection){
           eliminatePosX2 += 50;
           c1++;
           turn = !turn;
-          console.log("Eliminated")
+          printTurn(turn);
+          console.log("Eliminated");
+          messagesStatus.innerHTML += "Eliminated<br>";
         }
-      }
-      else if(confirm2(p[pushToken].m-25,p[pushToken].n-43.3)){
+      } else if (confirm2(p[pushToken].m - 25, p[pushToken].n - 43.3)) {
         //Move and push
         t1.m = t2.m;
         t1.n = t2.n;
-        t2.m = p[pushToken].m
-        t2.n = p[pushToken].n
+        t2.m = p[pushToken].m;
+        t2.n = p[pushToken].n;
         p[pushToken].m = p[pushToken].m - 25;
         p[pushToken].n = p[pushToken].n - 43.3;
         turn = !turn;
+        printTurn(turn);
+      } else {
+        console.log("Invalid Move! Please Try Again!");
+        messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
-      else{
-        console.log("Invalid Move! Please Try Again!")
-      }
+    } else {
+      console.log("Invalid Move! Please Try Again!");
+      messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
     }
-    else{
-      console.log("Invalid Move! Please Try Again!")
-    }
-
   }
 }
