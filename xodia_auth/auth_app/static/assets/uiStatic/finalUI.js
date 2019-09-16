@@ -1,3 +1,18 @@
+function detectmob() { 
+  if( navigator.userAgent.match(/Android/i)
+  || navigator.userAgent.match(/webOS/i)
+  || navigator.userAgent.match(/iPhone/i)
+  || navigator.userAgent.match(/iPad/i)
+  || navigator.userAgent.match(/iPod/i)
+  || navigator.userAgent.match(/BlackBerry/i)
+  || navigator.userAgent.match(/Windows Phone/i)
+  ){
+     return true;
+   }
+  else {
+     return false;
+   }
+ }
 //Declare and Initialize
 var canvas = document.querySelector("canvas");
 innerWidth = window.innerWidth;
@@ -5,8 +20,17 @@ innerHeight = window.innerHeight;
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 var c = canvas.getContext("2d");
-var s = 350;
-var d = 300;
+var s;
+var d;
+if(detectmob()){
+  s = 200;
+  d = 300;
+}
+else{
+  s = 350;
+  d = 300;
+}
+
 var firstclick = true;
 var turn = true; //true=player1 false=player2
 var messagesStatus = document.getElementById("status");
