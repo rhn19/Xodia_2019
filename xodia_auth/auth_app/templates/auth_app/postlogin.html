@@ -151,15 +151,17 @@
       <div class="container">
     <div class="row">
       <div class="col-sm mr-auto ml-auto text-center">
-            <h2 class="title description-white">About the Game</h2>
+        <h2 class="title description-white">About FrostFire</h2>
             <div class="heading-underline" style="width: 55%;height: .2rem;background-color: #FFFFFF;margin: 1rem auto 2rem;"></div>
       <br>
-            <p class="description-white">Abalone is an award-winning two-player abstract strategy board game designed by Michel Lalet and Laurent Lévi in 1987. Players are represented by opposing black and white marbles[1] on a hexagonal board with the objective of pushing six of the opponent's marbles off the edge of the board.
-
-The game is arranged similar to Chinese checkers but without starting spaces and with a "moat" around the edge of the board. Players start with 14 marbles instead of 10, there are only two "colors", and the starting arrangement is different. But the game also uses a hexagon with marbles and 5 pits on each edge.
-
-Abalone was published in 1990 and has sold more than 4.5 million units. The year it was published it received one of the first Mensa Select awards in New York, New York. It is currently sold in more than thirty countries.
-
+            <p class="description-white" style="font-size:1.1rem">The Battle has begun.
+              The Gods have pitted the two elements of nature, fire and ice, against one another. With ferocious fighting skills and an ardent sense of triumph, the dragons have offered to serve as the battalions.
+              
+              Protect this world at all costs, for the wraths of the enemy mustn’t be provoked.  
+              Your dragons must be set to destroy the enemy’s battalion.  Only then will you emerge victorious.<br><br>
+              
+              Survive the battlefield.<br>
+              FROSTFIRE.
 </p>
           </div>
       <div class="col-sm mr-auto ml-auto text-center">
@@ -172,33 +174,83 @@ Abalone was published in 1990 and has sold more than 4.5 million units. The year
 
 
 <!---rules page starts--->
-<div id="Rules" class="section section-dark-blue" style="background-color: rgba(0,0,0,.8);">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8 ml-auto mr-auto text-center">
-            <h2>Rules of the Game</h2><br>
-            <div class="heading-underline" style="width: 65%;height: .2rem;background-color: #FFFFFF;margin: .5rem auto 2rem;"></div>
-            <p class="description-white">The board consists of 61 circular spaces arranged in a hexagon, five on a side. Each player has 14 marbles that rest in the spaces and are initially arranged as shown below, on the left image. The players take turns with the black marbles moving first. For each move, a player moves a straight line of one, two or three marbles of one color one space in one of six directions. The move can be either broadside / arrow-like (parallel to the line of marbles) or in-line / in a line (serial in respect to the line of marbles), as illustrated below.</p>
-          </div>
-
-        </div>
-    <br>
-    <div class="row text-center">
-
-      <div class="col-sm col-md-4 mr-auto ml-auto text-center">
-            <a class="btn btn-outline-neutral btn-round btn-lg bg-dimgrey" href="{% static 'wsu-css-cheat-sheet.pdf' %}" target="_blank">C Template
-            </a>
-          </div>
-      <div class="col-sm col-md-4 mr-auto ml-auto text-center">
-            <a class="btn btn-outline-neutral btn-round btn-lg" href="{% static 'wsu-css-cheat-sheet.pdf' %}" target="_blank">C++ Template
-            </a>
-          </div>
-      <div class="col-sm col-md-4 mr-auto ml-auto text-center">
-            <a class="btn btn-outline-neutral btn-round btn-lg" href="{% static 'wsu-css-cheat-sheet.pdf' %}" target="_blank">Documentation
-            </a>
-          </div>
-        </div>
+<div id="Rules" class="section section-dark" style="background-color: rgba(0,0,0,0.8)">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 ml-auto mr-auto text-center">
+        <h2 style="color: #ffff">Rules of the Game</h2><br>
+        <div class="heading-underline" style="width: 65%;height: .2rem;background-color: #FFFFFF;margin: .5rem auto 2rem;"></div>
       </div>
+    </div>
+    <div class="row d-flex justify-content-center">
+      <div class="col-lg-6">
+       <center><h3 style="color: white">Rules</h3></center> 
+      </div>
+      <div class="col-lg-6">
+        <center><h3 style="color:white">Documentation</h3></center>
+      </div>
+    </div>
+    <br>
+    <div class="row d-flex justify-content-center">
+      <div class="col-lg-6">
+        <ul class="ul">
+          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+            The Code for the bots must be strictly written in
+            C/C++.
+          </li>
+          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+            The bots will be disqualified due to any errors in
+            the code or invalid moves.
+          </li>
+          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+            Bots will also be disqualified if they fail to
+            respond in the specified time limit.
+          </li>
+          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+            Malicious activity or excessive resource consumption
+            will also result in disqualification.
+          </li>
+          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+            Please refer to the documentation for the detailed
+            set of rules.
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-6">
+        <ul class="ul">
+          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+            The problem statement for FrostFire is provided below
+            along with a detailed documentation to understand
+            the game rules.
+          </li>
+          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+            Templates in C/C++ are put up to illustrate
+            the basic structure of the code, in order to get
+            started
+          </li>
+          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+            May the best algorithm win!
+          </li>
+        </ul>
+      </div>
+    </div>
+		<br><br>
+		<div class="row text-center">
+
+		  <div class="col-sm col-md-4 mr-auto ml-auto text-center">
+        <a class="btn btn-outline-neutral btn-round btn-lg bg-dimgrey" href="{% static 'ctemplate.c' %}" target="_blank" download>C Template
+        </a>
+      </div>
+		  <div class="col-sm col-md-4 mr-auto ml-auto text-center">
+        <a class="btn btn-outline-neutral btn-round btn-lg" href="{% static 'cpptemplate.cpp' %}" target="_blank" download>C++ Template
+        </a>
+      </div>
+		  <div class="col-sm col-md-4 mr-auto ml-auto text-center">
+        <a class="btn btn-outline-neutral btn-round btn-lg" href="{% static 'XODIA.pdf' %}" target="_blank" download>Documentation
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!------End code for writing the rules of the game-->
