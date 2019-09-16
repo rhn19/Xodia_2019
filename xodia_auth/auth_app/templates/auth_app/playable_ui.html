@@ -37,8 +37,7 @@
     <style type="text/css">
       canvas {
         border: 1px solid black;
-        background-color: rgba(0,0,0,0.85);
-       
+        background-color: rgba(0, 0, 0, 0.8);
       }
       body {
         margin: 0;
@@ -57,183 +56,342 @@
   </head>
   <body>
     <!-- Navbar -->
-   <nav class="navbar navbar-expand-lg fixed-top bg-darker navbar-transparent" color-on-scroll="110">
+    <nav
+      class="navbar navbar-expand-lg fixed-top bg-darker navbar-transparent"
+      color-on-scroll="110"
+    >
       <div class="container">
         <div class="navbar-translate">
           <a class="navbar-brand" href="{% url 'user_login' %}#">
-      <img src="{% static 'xodia1.png' %}" width="150" height="30">
-      </a>
-          <button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <img src="{% static 'xodia1.png' %}" width="150" height="30" />
+          </a>
+          <button
+            class="navbar-toggler navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navigation"
+            aria-controls="navigation-index"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span class="navbar-toggler-bar bar1"></span>
             <span class="navbar-toggler-bar bar2"></span>
             <span class="navbar-toggler-bar bar3"></span>
           </button>
         </div>
-        <div class="collapse navbar-collapse justify-content-end" id="navigation">
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navigation"
+        >
           <ul class="navbar-nav">
-  
-      <li class="nav-item">
-        <a class="nav-link" rel="tooltip" title="Login" data-placement="bottom" href="#login" >
-          Login
-        </a>
-      </li>
+            {% if not au %}
             <li class="nav-item">
-              <a class="nav-link" rel="tooltip" title="About" data-placement="bottom" href="{% url 'user_login' %}#About" >
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="Login"
+                data-placement="bottom"
+                href="{% url 'user_login' %}"
+              >
+                Home
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="Login"
+                data-placement="bottom"
+                href="{% url 'user_login' %}#login"
+              >
+                Login
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="About"
+                data-placement="bottom"
+                href="{% url 'user_login' %}#About"
+              >
+                About Game
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="Rules"
+                data-placement="bottom"
+                href="{% url 'user_login' %}#Rules"
+              >
+                Rules
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="Contact"
+                data-placement="bottom"
+                href="{% url 'user_login' %}#Contact"
+              >
+                Contact
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="Register"
+                data-placement="bottom"
+                href="{% url 'user_register' %}"
+              >
+                Register
+              </a>
+            </li>
+            {% endif %} {% if au %}
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="About"
+                data-placement="bottom"
+                href="{% url 'login_success' %}#About"
+              >
                 About Game
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" rel="tooltip" title="Rules" data-placement="bottom" href="{% url 'user_login' %}#Rules">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="Rules"
+                data-placement="bottom"
+                href="{% url 'login_success' %}#Rules"
+              >
                 Rules
               </a>
             </li>
-  
-  
             <li class="nav-item">
-              <a class="nav-link" rel="tooltip" title="Sign-up/Sign-in" data-placement="bottom" href="{% url 'playable_ui' %}">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="Sign-up/Sign-in"
+                data-placement="bottom"
+                href="{% url 'playable_ui' %}"
+              >
                 Playable UI
               </a>
             </li>
-        <li class="nav-item">
-              <a class="nav-link" rel="tooltip" title="Contact" data-placement="bottom" href="{% url 'user_login' %}#Contact" >
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="Contact"
+                data-placement="bottom"
+                href="{% url 'login_success' %}#Contact"
+              >
                 Contact
               </a>
             </li>
-      <li class="nav-item">
-              <a class="nav-link" rel="tooltip" title="Register" data-placement="bottom" href="{% url 'user_register' %}" >
-                Register
+
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                rel="tooltip"
+                title="Contact"
+                data-placement="bottom"
+                href="{% url 'user_logout' %}"
+              >
+                Sign Out
               </a>
             </li>
+            {% endif %}
           </ul>
         </div>
       </div>
     </nav>
     <!-- End Navbar -->
-    <img src="{% static 'assets/uiStatic/t1.svg' %}" id="imgp1" style="display:none">
-    <img src="{% static 'assets/uiStatic/t12.svg' %}" id="imgp2" style="display:none">
+    <img
+      src="{% static 'assets/uiStatic/t1.svg' %}"
+      id="imgp1"
+      style="display:none"
+    />
+    <img
+      src="{% static 'assets/uiStatic/t12.svg' %}"
+      id="imgp2"
+      style="display:none"
+    />
     <div class="container-fluid" style="margin:0px;padding:0px;">
       <div class="row d-flex align-items-center">
         <div class="col-lg-6 col-sm-12">
-            <canvas onclick="showcoords(event)"></canvas>
+          <canvas onclick="showcoords(event)"></canvas>
         </div>
         <div class="col-lg-5 col-sm-12">
-            <div class="container phone">
-              <div class="row" style="">
-                <div class="col-lg-12">
-                  <input
-                    class="col-10"
-                    id="stringip"
-                    type="text"
-                    style="width:20rem;height:30px;color: black;border-radius:10px;margin:5px;padding-left:20px"
-                    placeholder="String Input..."
-                  />
-                  <button
-                    style="font-size:0.7rem;"
-                    class="btn button-primary col-2"
-                    id="stringbtn"
-                    onclick="stringInput()"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-              <div class="row" style="margin-top:2rem;padding-left:0.5rem">
-                <div class="col-lg-4">
-                  <button
-                    id="undo"
-                    onclick="undomove()"
-                    class="btn button-primary"
-                  >
-                    Undo Move
-                  </button>
-                </div>
-                <div class="col-lg-4">
-                  <button
-                    id="undo"
-                    onclick="history.go(0)"
-                    class="btn button-primary"
-                  >
-                    Restart
-                  </button>
-                </div>
-              </div>
-              <div class="row">
-                <div
+          <div class="container phone">
+            <div class="row" style="">
+              <div class="col-lg-12">
+                <input
                   class="col-10"
-                  style="height:8.4rem;border:solid 2px #fff;color:white;border-radius:20px;margin-top:50px;overflow-y:auto"
+                  id="stringip"
+                  type="text"
+                  style="width:20rem;height:30px;color: black;border-radius:10px;margin:5px;padding-left:20px"
+                  placeholder="String Input..."
+                  hidden
+                />
+                <button
+                  style="font-size:0.7rem;"
+                  class="btn button-primary col-2"
+                  id="stringbtn"
+                  onclick="stringInput()"
+                  hidden
                 >
-                  <p style="font-size:1.5rem;margin-bottom:0px;">Status</p>
-  
-                  <p id="status" style="font-size:1.2rem;">
-                    Sentinel's turn (Blue):
-                  </p>
-                </div>
+                  Submit
+                </button>
               </div>
-  
-              <div class="row" style="">
-                <div
-                  class="col-10"
-                  style="height:15rem;border:solid 2px #fff;color:white;border-radius:10px;margin-top:20px;overflow-y:scroll;"
+            </div>
+            <div class="row" style="margin-top:2rem;padding-left:0.5rem">
+              <div class="col-lg-4">
+                <button
+                  id="undo"
+                  onclick="undomove()"
+                  class="btn button-primary"
+                  hidden
                 >
-                  <p style="font-size:1.7rem;margin-bottom:0px;">Rules</p>
-  
-                  <p style="font-size:1.2rem;">
-                    Player 1: Sentinel (Blue)<br />
-                    Player 2: Scourge (Red)<br />
-                    Stingers are placed in row 1 and 3.<br />
-                    Bombers are placed in row 0 and 4.<br />
-                    <br />
-                    1. Each player gets one move per turn.<br />
-  
-                    2.Moves: Stingers (row 1 and 3) can move diagonally forward
-                    while the bombers (row 0 and 4) can move forward in all
-                    directions. Example: If a bomber is placed in location (4,2)
-                    then it can move to (3,1), (3,3), (3,2), (4,1), (4,3) provided
-                    the space is empty. Note: All moves are only forward. There
-                    are no backward moves in the game.<br />
-  
-                    3. Vertical Elimination: When your token (stinger or bomber)
-                    comes face to face with the opponent’s token and the space
-                    behind the opponent’s token is empty, then the player can
-                    eliminate the opponent's token by jumping straight to the
-                    empty space.<br />
-  
-                    4. Horizontal Elimination: When your token (stinger or bomber)
-                    has an enemy token on its left or right side, and the space
-                    next to the enemy token is empty, then the player can
-                    eliminate the opponent’s token by jumping straight to the
-                    empty space.<br />
-  
-                    5. Gameover: The game ends when either player’s bomber reaches
-                    the respective opponent’s base row (row 0 and 4).<br />
-  
-                    <br />
-                    To click and play:<br />
-                    1. Select the token you want to move.<br />
-                    2. Click a valid empty space to move the token.<br />
-                    <br />
-                    Using string inputs:<br />
-                    1. Enter the input in the textbox using the following
-                    format:<br />
-                    row1 col1 row2 col2<br />
-                    row1 col1= Initial position<br />
-                    row2 col2= Final position<br />
-  
-                    Note: There is a space after row1,col1 and row2
-                    respectively.<br />
-  
-                    <b
-                      >For a more comprehensive description of the game, please
-                      refer to the documentation.</b
-                    >
-                  </p>
-                </div>
+                  Undo Move
+                </button>
+              </div>
+              <div>
+                <button
+                  id="undo"
+                  onclick="history.go(0)"
+                  class="btn button-primary"
+                >
+                  Restart
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                class="col-10"
+                style="height:8.4rem;border:solid 2px #fff;color:white;border-radius:20px;margin-top:50px;overflow-y:auto"
+              >
+                <p style="font-size:1.5rem;margin-bottom:0px;">Status</p>
+
+                <p id="status" style="font-size:1.2rem;">
+                  Sentinel's turn (Blue):
+                </p>
+              </div>
+            </div>
+
+            <div class="row" style="">
+              <div
+                class="col-10"
+                style="height:15rem;border:solid 2px #fff;color:white;border-radius:10px;margin-top:20px;overflow-y:scroll;"
+              >
+                <p style="font-size:1.7rem;margin-bottom:0px;">Rules</p>
+                <br />
+
+                <p style="font-size:1.3rem;">
+                  1. The dragons can only move TWO at a time.<br /><br />
+                  2. The two dragons may move either horizontally or
+                  diagonally:<br />
+                  i. The two dragons selected together, E3 and E4, can move in a
+                  pair horizontally, in a way that either E3 is at E2 or E4 is
+                  at E5. <br />
+                  ii. The two dragons selected together, E3 and F3, can move in
+                  a pair diagonally, in a way that E3 is at D3 and F3 is at
+                  E3.<br /><br />
+                  3. The moves may be considered invalid if:<br />
+                  i. The pair of dragons may try to move more than one of the
+                  opponent’s dragon.<br />
+                  ii. The pair of dragons may push one of their own kind.<br />
+                  iii. The pair of dragons may push the opponent’s dragon off
+                  the corner of the board. <br /><br />4. The battle is won when
+                  the enemy has lost four of its dragons.<br /><br />
+
+                  <strong
+                    >For a more comprehensive description of the game, please
+                    refer to the documentation.</strong
+                  >
+                </p>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
-    <script type="text/javascript" src="{% static 'assets/uiStatic/finalUI.js' %}"></script>
+    <script
+      type="text/javascript"
+      src="{% static 'assets/uiStatic/finalUI.js' %}"
+    ></script>
+    <!--   Core JS Files   -->
+    <script
+      src="{% static 'assets/js/core/jquery.min.js' %}"
+      type="text/javascript"
+    ></script>
+    <script
+      src="{% static 'assets/js/core/popper.min.js' %}"
+      type="text/javascript"
+    ></script>
+    <script
+      src="{% static 'assets/js/core/bootstrap.min.js' %}"
+      type="text/javascript"
+    ></script>
+    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+    <script src="{% static 'assets/js/plugins/bootstrap-switch.js' %}"></script>
+    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+    <script
+      src="{% static 'assets/js/plugins/nouislider.min.js' %}"
+      type="text/javascript"
+    ></script>
+    <!--  Plugin for the DatePicker, full documentation here: https://github.com/uxsolutions/bootstrap-datepicker -->
+    <script src="{% static 'assets/js/plugins/moment.min.js' %}"></script>
+    <script
+      src="{% static 'assets/js/plugins/bootstrap-datepicker.js' %}"
+      type="text/javascript"
+    ></script>
+    <!-- Control Center for Paper Kit: parallax effects, scripts for the example pages etc -->
+    <script
+      src="{% static 'assets/js/paper-kit.js' %}"
+      type="text/javascript"
+    ></script>
+    <script src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"></script>
+    <!--  Google Maps Plugin    -->
+    <script>
+      $(document).ready(function() {
+        if ($("#datetimepicker").length != 0) {
+          $("#datetimepicker").datetimepicker({
+            icons: {
+              time: "fa fa-clock-o",
+              date: "fa fa-calendar",
+              up: "fa fa-chevron-up",
+              down: "fa fa-chevron-down",
+              previous: "fa fa-chevron-left",
+              next: "fa fa-chevron-right",
+              today: "fa fa-screenshot",
+              clear: "fa fa-trash",
+              close: "fa fa-remove"
+            }
+          });
+        }
 
+        function scrollToDownload() {
+          if ($(".section-download").length != 0) {
+            $("html, body").animate(
+              {
+                scrollTop: $(".section-download").offset().top
+              },
+              1000
+            );
+          }
+        }
+      });
+    </script>
   </body>
 </html>

@@ -95,7 +95,7 @@ class RegisterView(View):
             response = urllib2.urlopen(req)
             result = json.load(response)
             if not result['success']:
-                return render(request, self.template_name, {'error': 'Invalid Captcha'})
+                return render(request, self.template_name, {'error': 'Invalid Captcha!'})
             user.save()
             profile.user = user
             profile.college_name = request.POST['college_name']
@@ -105,7 +105,7 @@ class RegisterView(View):
             login(request, user)
 
         except IntegrityError:
-            context = {'error': 'Username already exists'}
+            context = {'error': 'Username already exists!'}
             return render(request, self.template_name, context)
 
         return HttpResponseRedirect(reverse('user_login'))
@@ -115,4 +115,5 @@ class PlayableUI(View):
     template_name = 'auth_app/playable_ui.html'
 
     def get(self, request):
-        return render(request, self.template_name, {})
+        au = request.user.is_authenticated
+        return render(request, self.template_name, {'au': au})

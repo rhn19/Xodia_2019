@@ -21,6 +21,8 @@
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="{% static 'assets/demo/demo.css' %}" rel="stylesheet">
 <style>
+  .body {
+  }
   .card-link {
   color: #696969;
 }
@@ -37,17 +39,14 @@
   background-color:rgb(105,110,102);
 }
 .parallax {
-  /* The image used */
-  background-image: url("{% static './assets/img/dragon.jpg&#39' %}");
-
-  /* Set a specific height */
-  min-height: 500px;
-
+  overflow-x: hidden; 
+  background-image: url({% static './assets/img/dragon.jpg' %});
   /* Create the parallax scrolling effect */
+  min-height:100vh;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+
 }
 
 .playButton{
@@ -77,16 +76,7 @@
 </style>
 </head>
 
-<body class="index-page sidebar-collapse" style="background-image: url({% static './assets/img/dragon.jpg' %});
-
-  /* Set a specific height */
-  min-height: 500px;
-
-  /* Create the parallax scrolling effect */
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;">
+<body class="index-page sidebar-collapse parallax" style="">
   <!-- Navbar -->
    <nav class="navbar navbar-expand-lg fixed-top bg-darker navbar-transparent" color-on-scroll="110">
     <div class="container">
@@ -229,7 +219,7 @@
 </p>
           </div>
       <div class="col-sm mr-auto ml-auto text-center" style="margin-left: 10px;"><br>
-            <img src="{% static 'assets/img/xodialogo22.png' %}" alt="Rounded Image" class="img-fluid" style="height: 400px;">
+            <img src="{% static 'assets/img/xodialogo22.png' %}" alt="Rounded Image" class="img-fluid" style="width:80%">
           </div>
           </div>
         </div>
@@ -250,15 +240,8 @@
     <div class="row d-flex justify-content-center">
       <div class="col-lg-6">
        <center><h3 style="color: white">Rules</h3></center> 
-      </div>
-      <div class="col-lg-6">
-        <center><h3 style="color:white">Documentation</h3></center>
-      </div>
-    </div>
-    <br>
-    <div class="row d-flex justify-content-center">
-      <div class="col-lg-6">
-        <ul class="ul">
+       <br>
+       <ul class="ul">
           <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
             The Code for the bots must be strictly written in
             C/C++.
@@ -282,21 +265,31 @@
         </ul>
       </div>
       <div class="col-lg-6">
+        <center><h3 style="color:white">Documentation</h3></center><br>
         <ul class="ul">
-          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
-            The problem statement for FrostFire is provided below
-            along with a detailed documentation to understand
-            the game rules.
-          </li>
-          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
-            Templates in C/C++ are put up to illustrate
-            the basic structure of the code, in order to get
-            started
-          </li>
-          <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
-            May the best algorithm win!
-          </li>
-        </ul>
+            <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+              The problem statement for FrostFire is provided below
+              along with a detailed documentation to understand
+              the game rules.
+            </li>
+            <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+              Templates in C/C++ are put up to illustrate
+              the basic structure of the code, in order to get
+              started
+            </li>
+            <li style="font-size: 1.1rem;color:rgba(255,255,255,0.8)">
+              May the best algorithm win!
+            </li>
+          </ul>
+      </div>
+    </div>
+    <br>
+    <div class="row d-flex justify-content-center">
+      <div class="col-lg-6">
+        
+      </div>
+      <div class="col-lg-6">
+        
       </div>
     </div>
 		<br><br>

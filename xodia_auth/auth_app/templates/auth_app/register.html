@@ -26,8 +26,6 @@ body {
   -moz-background-size: cover;
   background-size: cover;
   -o-background-size: cover;
-  max-width: 100%;
-  min-height:100vh;
 }
   .card-link {
   color: #696969;
@@ -61,7 +59,7 @@ background-position: center;
 background-repeat: no-repeat;
 background-size: cover;">
   <!-- Navbar -->
-   <nav class="navbar navbar-default navbar-expand-lg fixed-top bg-darker " color-on-scroll="25">
+   <nav class="navbar navbar-default navbar-expand-lg fixed-top bg-darker ">
     <div class="container">
       <div class="navbar-translate">
         <a class="navbar-brand" href="{% url 'user_login' %}#">
@@ -107,9 +105,9 @@ background-size: cover;">
     </div>
   </nav>
   <!-- End Navbar -->
-        <div class="row  align-items-center " style="height:100vh;background-color:rgba(0,0,0,0.8)">
-          <div class="col-sm-md-lg mr-auto ml-auto" style="max-width:33rem; width:70%;">
-            <div class="container rounded " style="background-color: rgba(0,0,0,0.8);">
+        <div class="row  align-items-center justify-content-center mt-5 pb-5" style="min-height:100vh;background-color:rgba(0,0,0,0.8)">
+          <div class="col-lg-4 p-2">
+            <div class="container rounded" style="background-color: rgba(0,0,0,0.8);">
               <div class="card-body mr-auto ml-auto mt-5 ml-5 mr-5">
                 <div class="text-center text-muted mb-4">
                    <h3 style="color: #ffff">Register</h3>
@@ -119,6 +117,9 @@ background-size: cover;">
 		<p id="validationEmpty" style="display: none">Please fill all the fields</p>
                 <form method="POST" id="regForm">
                     {% csrf_token %}
+                    {% if error %}
+                    <h5 class="text-white text-center">{{error}}</h5>
+                    {% endif %}
                   <div class="form-group">
                     <div class="input-group input-group-alternative">
                       <div class="input-group-prepend">
@@ -193,10 +194,10 @@ background-size: cover;">
             </div>
            </div>
         </div>
-
-        <footer class="footer  bg-darker ">
+       
+        <footer class="footer  bg-darker">
       <div class="container">
-      	<!------------foooter---------->
+        <!------------foooter---------->
         <div class="row text-center">
 
               <div class="col-md-4 mr-auto ml-auto ">
