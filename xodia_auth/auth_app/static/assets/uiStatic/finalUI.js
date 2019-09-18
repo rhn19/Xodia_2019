@@ -19,17 +19,6 @@ innerWidth = window.innerWidth;
 innerHeight = window.innerHeight;
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-var c = canvas.getContext("2d");
-var s;
-var d;
-if(detectmob()){
-  s = 200;
-  d = 300;
-}
-else{
-  s = 350;
-  d = 300;
-}
 
 var firstclick = true;
 var turn = true; //true=player1 false=player2
@@ -41,12 +30,30 @@ var p = [];
 var p2 = [];
 var c1 = 0;
 var c2 = 0;
-var eliminatePosX = s;
-var eliminatePosX2 = s;
+
 var eliminatePosYDistance = 130;
 var eliminatePosY1 = 105;
 var eliminatePosY2 = 130;
 var gameOver = false;
+
+var s;
+var d;
+if(detectmob()){
+  s = 200;
+  d = 300;
+  canvas.height = 300+260+eliminatePosY2+30;
+}
+else{
+  s = 350;
+  d = 300;
+  canvas.height = innerHeight;
+}
+
+var eliminatePosX = s;
+var eliminatePosX2 = s;
+
+var c = canvas.getContext("2d");
+
 
 class token {
   constructor(m, n, color) {
@@ -131,13 +138,13 @@ function create_board() {
   mov = 25;
   c.font = "25px Arial";
   c.fillStyle = "#aaa";
-  c.fillText("a", s - 90, d);
-  c.fillText("b", s - 115, d + 43.3);
-  c.fillText("c", s - 140, d + 86.6);
-  c.fillText("d", s - 165, d + 139.9);
-  c.fillText("e", s - 140, d + 193.2);
-  c.fillText("f", s - 115, d + 236.5);
-  c.fillText("g", s - 90, d + 279.8);
+  c.fillText("A", s - 90, d);
+  c.fillText("B", s - 115, d + 43.3);
+  c.fillText("C", s - 140, d + 86.6);
+  c.fillText("D", s - 165, d + 139.9);
+  c.fillText("E", s - 140, d + 193.2);
+  c.fillText("F", s - 115, d + 236.5);
+  c.fillText("G", s - 90, d + 279.8);
   c.fillText("1", s + mov, d + 349.8 - 8);
   c.fillText("2", s + 50 + mov, d + 349.8 - 8);
   c.fillText("3", s + 100 + mov, d + 349.8 - 8);
@@ -252,8 +259,8 @@ function check(a, b) {
 }
 
 function showcoords(event) {
-  var x = event.clientX;
-  var y = event.clientY;
+  var x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+  var y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
   console.log("Mouse Click Position: ", x, y);
 
   if (!gameOver) {
@@ -353,7 +360,7 @@ function move(t1, t2) {
   var count = 0;
   var pass;
 
-  if (t2.m === t1.m + 50 && t1.n === t2.n) {
+  if (t2.m === t1.m + 50 && Math.ceil(t1.n) === Math.ceil(t2.n)) {
     //Right Horizontal
     for (i = 0; i < 11; i++) {
       //Checking if there is a token in front of t2
@@ -381,7 +388,7 @@ function move(t1, t2) {
       //Check if token found can be pushed
       valid2(t1, t2, pass, "horizontalRight");
     }
-  } else if (t1.m === t2.m + 50 && t1.n === t2.n) {
+  } else if (t1.m === t2.m + 50 && Math.ceil(t1.n) === Math.ceil(t2.n)) {
     // Left Horizontal
     for (i = 0; i < 11; i++) {
       //Checking if there is a token in front of t2
@@ -409,7 +416,7 @@ function move(t1, t2) {
       //Check if token found can be pushed
       valid2(t1, t2, pass, "horizontalLeft");
     }
-  } else if (t2.m === t1.m + 25 && t2.n === t1.n + 43.3) {
+  } else if (t2.m === t1.m + 25 && Math.ceil(t2.n) === Math.ceil(t1.n + 43.3)) {
     // Diagonal Down Right
     for (i = 0; i < 11; i++) {
       //Checking if there is a token in front of t2
@@ -556,7 +563,7 @@ function confirm2(w, r) {
   for (var i = 0; i < 11; i++) {
     if (
       (w === p[i].m && Math.ceil(r) === Math.ceil(p[i].n)) ||
-      (p2[i].m === w && Math.ceil(p2[i].n) == Math.ceil(r))
+      (p2[i].m === w && Math.ceil(p2[i].n) === Math.ceil(r))
     ) {
       v = 1;
       break;
@@ -645,16 +652,18 @@ function valid2(t1, t2, pushToken, moveDirection) {
       t2.m + 25 === p2[pushToken].m &&
       Math.ceil(t2.n + 43.3) === Math.ceil(p2[pushToken].n)
     ) {
+      console.log("Here1")
       if (
         (p2[pushToken].m === getXUpperlimit(p2[pushToken].n) &&
           Math.ceil(p2[pushToken].n) >= Math.ceil(d + 129.9)) ||
         Math.ceil(p2[pushToken].n) === Math.ceil(d + 259.8)
       ) {
+        console.log("Here2")
         if (
           p2[pushToken].m === s + 150 &&
           Math.ceil(p2[pushToken].n) === Math.ceil(d + 259.8)
         ) {
-          console.log("Invalid Move! Please Try Again!");
+          console.log("Here3\nInvalid Move! Please Try Again!");
           messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
         } else {
           //Move and eliminate
@@ -978,7 +987,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         turn = !turn;
         printTurn(turn);
       } else {
-        console.log("Invalid Move! Please Try Again!");
+        console.log("hhhInvalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
     } else if (
@@ -1076,4 +1085,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
       messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
     }
   }
+
+  console.log(p2[pushToken])
+  console.log(p[pushToken])
 }
