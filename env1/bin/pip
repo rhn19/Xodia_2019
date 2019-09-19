@@ -1,5 +1,4 @@
 #!/home/rhn19/DjangoProjects/xodia-auth/env1/bin/python
-
 # -*- coding: utf-8 -*-
 import re
 import sys

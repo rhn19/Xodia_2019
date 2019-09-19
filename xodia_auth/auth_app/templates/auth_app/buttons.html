@@ -1,0 +1,27 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="Bot_file">
+    <button type="submit" name="clicked">Upload</button>
+  </form>
+
+  <form method="post">
+      {% csrf_token %}
+      <select name="players">
+      {% for player in all_players%}
+          <option value = "{{ player }}">{{ player }}</option>
+      {% endfor %}
+      </select>
+      <input type='submit' name="Match" value="MATCH">
+  </form>
+
+  <form method="post">
+      {% csrf_token %}
+      Player 2
+      <input type="checkbox" name="Player2" value="Play as Player 2">
+      <select name="players">
+      {% for player in all_players%}
+          <option value = "{{ player }}">{{ player }}</option>
+      {% endfor %}
+      </select>
+      <input type='submit' name="Logs" value="LOGS">
+  </form>
