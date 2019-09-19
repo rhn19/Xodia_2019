@@ -12,25 +12,23 @@ from django.db.utils import IntegrityError
 import urllib2
 import urllib
 import json
-import os
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from .__init__ import project_base_dir
-
+import os
 
 # Create your views here.
 
 match_path = project_base_dir + "matches/"
 bot_path = project_base_dir + "files/"
 
-
 class LoginView(View):
     template_name = 'auth_app/index.html'
 
     def get(self, request):
         if request.user.is_authenticated():
-            # user = request.user.username
-            # return render(request, 'auth_app/postlogin.html', {'username': user})
+            #user = request.user.username
+            #return render(request, 'auth_app/postlogin.html', {'username': user})
             return HttpResponseRedirect(reverse('login_success'))
         else:
             return render(request, self.template_name)
@@ -76,8 +74,8 @@ class RegisterView(View):
 
     def get(self, request):
         if request.user.is_authenticated():
-            # user = request.user.username
-            # return render(request, 'auth_app/postlogin.html', {'username': user})
+            #user = request.user.username
+            #return render(request, 'auth_app/postlogin.html', {'username': user})
             return HttpResponseRedirect(reverse('login_success'))
         else:
             return render(request, self.template_name)
@@ -124,7 +122,6 @@ class PlayableUI(View):
     def get(self, request):
         au = request.user.is_authenticated
         return render(request, self.template_name, {'au': au})
-
 
 class GridView(View):
     template_name = 'auth_app/buttons.html'

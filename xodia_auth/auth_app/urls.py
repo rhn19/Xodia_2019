@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import *
+from auth_app.views import *
 
 urlpatterns = [
     url(r'^$', LoginView.as_view(), name="user_login"),
@@ -8,5 +8,4 @@ urlpatterns = [
     url(r'^register/$', RegisterView.as_view(), name="user_register"),
     url(r'^play/$', PlayableUI.as_view(), name="playable_ui"),
     url(r'^upload/$', GridView.as_view(), name="grid"),
-
 ]

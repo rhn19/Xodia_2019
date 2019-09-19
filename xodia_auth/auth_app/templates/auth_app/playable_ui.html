@@ -4,9 +4,9 @@
 <html lang="en">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="initial-scale=0.7">
+    <meta name="viewport" content="initial-scale=0.7" />
     <title>
-       XOdia '19
+      XOdia '19
     </title>
     <link
       rel="apple-touch-icon"
@@ -51,17 +51,16 @@
       }
 
       @media only screen and (min-width: 768px) {
-        .desktop{
-            margin-top: 0px
-          }
+        .desktop {
+          margin-top: 0px;
+        }
       }
 
       @media only screen and (max-width: 768px) {
-        .phone{
-            margin-top: 30px;
-          }
+        .phone {
+          margin-top: 30px;
+        }
       }
-
     </style>
   </head>
   <body>
@@ -234,7 +233,10 @@
       id="imgp2"
       style="display:none"
     />
-    <div class="container-fluid" style="margin:0px;padding:0px;background-color: rgba(0, 0, 0, 0.8);">
+    <div
+      class="container-fluid"
+      style="margin:0px;padding:0px;background-color: rgba(0, 0, 0, 0.8);"
+    >
       <div class="row d-flex align-items-center">
         <div class="col-lg-6 col-sm-12 col-md-12">
           <canvas onclick="showcoords(event)"></canvas>
@@ -305,26 +307,44 @@
                 <p style="font-size:1.3rem;">
                   Player 1: Tyragon (Blue)<br />
                   Player 2: Abagon (Red)<br /><br />
-                  1. The dragons can only move TWO at a time.<br /><br />
-                  2. The two dragons may move either horizontally or
-                  diagonally:<br />
-                  i. The two dragons selected together, E3 and E4, can move in a
-                  pair horizontally, in a way that either E3 is at E2 or E4 is
-                  at E5. <br />
-                  ii. The two dragons selected together, E3 and F3, can move in
-                  a pair diagonally, in a way that E3 is at D3 and F3 is at
-                  E3.<br /><br />
-                  3. The moves may be considered invalid if:<br />
+                  String Notation: The alphabet represents the row and the
+                  number represents the diagonal. For example, C4 represents the
+                  marble along diagonal 4 in the row C. <br /><br />
+
+                  1. To play the move, <br />i. Select the first dragon that you
+                  want to move. <br />ii. Select the second dragon in the
+                  direction in which you want both the dragons to slide.
+                  <br />Note: Whenever the move is made, the initial dragon
+                  pushes the final dragon in the direction specified. For
+                  example, select the marble at C4 first, then select the marble
+                  at C5. Thus, the dragons slide one step to the right. The
+                  dragon at C4 will thus move to C5 and the dragon at C5 will
+                  move to C6. <br /><br />2. Exactly two dragons from the same
+                  team, can move at a time. <br /><br />3. The two dragons may
+                  move either horizontally or diagonally: <br />i. The two
+                  dragons selected together, C4 and C5, can move in a pair
+                  horizontally, in a way that either C4 is at C3 or C5 is at
+                  C6.<br />
+                  ii. The two dragons selected together, B4 and C4, can move in
+                  a pair diagonally, in a way that B4 is at C4 and C4 is at
+                  D4.<br /><br />
+                  4. The dragon is eliminated from the board when two of the
+                  opponent’s dragons push it off the edge. <br />Note:
+                  Elimination doesn't work on the 6 vertices when the dragon is
+                  pushed towards the vertices. <br /><br />5. The moves may be
+                  considered invalid if:<br />
                   i. The pair of dragons may try to move more than one of the
                   opponent’s dragon.<br />
                   ii. The pair of dragons may push one of their own kind.<br />
                   iii. The pair of dragons may push the opponent’s dragon off
-                  the corner of the board. <br /><br />4. The battle is won when
+                  the vertex of the board. <br /><br />6. The battle is won when
                   the enemy has lost four of its dragons.<br /><br />
 
                   <strong
                     >For a more comprehensive description of the game, please
-                    refer to the documentation.</strong
+                    refer to the
+                    <a href="{% static 'XODIA.pdf' %}">documentation</a
+                    >.</strong
                   >
                 </p>
               </div>
