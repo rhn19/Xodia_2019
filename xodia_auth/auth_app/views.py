@@ -14,21 +14,31 @@ import urllib
 import json
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from .__init__ import project_base_dir
+from .__init__ import path
 import os
+from .tests import parseCompileTest
+from .RequestQueue import RequestQueue, request_queue
+from .Sandbox import SandboxRequest
+from sys import argv
 
 # Create your views here.
 
-match_path = project_base_dir + "matches/"
-bot_path = project_base_dir + "files/"
+bot_path = path + "files/"
+match_path = path + "matches/"
+# parallel thread which executes match requests one at a time
+match_runner = RequestQueue()
+if "runserver" not in argv:
+    match_runner.daemon = True  # enable Ctrl-C to terminate the whole program + thread
+match_runner.start()
+
 
 class LoginView(View):
     template_name = 'auth_app/index.html'
 
     def get(self, request):
         if request.user.is_authenticated():
-            #user = request.user.username
-            #return render(request, 'auth_app/postlogin.html', {'username': user})
+            # user = request.user.username
+            # return render(request, 'auth_app/postlogin.html', {'username': user})
             return HttpResponseRedirect(reverse('login_success'))
         else:
             return render(request, self.template_name)
@@ -74,8 +84,8 @@ class RegisterView(View):
 
     def get(self, request):
         if request.user.is_authenticated():
-            #user = request.user.username
-            #return render(request, 'auth_app/postlogin.html', {'username': user})
+            # user = request.user.username
+            # return render(request, 'auth_app/postlogin.html', {'username': user})
             return HttpResponseRedirect(reverse('login_success'))
         else:
             return render(request, self.template_name)
@@ -123,39 +133,39 @@ class PlayableUI(View):
         au = request.user.is_authenticated
         return render(request, self.template_name, {'au': au})
 
+
 class GridView(View):
     template_name = 'auth_app/buttons.html'
 
     def get(self, request):
         if request.user.is_authenticated:
-            all_players = Profile.objects.all()
+            all_players = User.objects.all()
             return render(request, self.template_name, {'all_players': all_players})
         else:
             return HttpResponseRedirect(reverse('user_login'))
 
     def post(self, request):
-
-        if request.FILES:
-            return HttpResponse(self.uploadBot(request))
+        if 'botup' in request.POST:
+            return self.uploadBot(request)
         elif 'Match' in request.POST:
-            return HttpResponse(self.matchGame(request))
+            return self.matchGame(request)
         elif 'Logs' in request.POST:
-            return HttpResponse(self.viewLogs(request))
+            return self.viewLogs(request)
         else:
             return HttpResponse('upload a file jackass')
 
     def uploadBot(self, request):
         player = Profile.objects.get(user=request.user)
-
+        all_players = User.objects.all()
         play = request.FILES['Bot_file']
 
         ext = play.name.split('.')[-1]
+        if play.size > 1000000:
+            return render(request, self.template_name, {'ms': 'File size should be less than 1 MB!', 'all_players': all_players})
 
-        if ext in ['cpp','c']:
+        if ext in ['cpp', 'c']:
             old_file = player.bot_path + '.' + player.bot_ext
-
             os.remove(old_file)
-
             new_file = player.bot_path + '.' + ext
             f = open(new_file, 'w+')
 
@@ -166,59 +176,85 @@ class GridView(View):
             player.bot_ext = ext
 
             player.save()
-            return '<h1>' + str(play.name) + '</h1>'
+            return render(request, self.template_name, {'ms': 'Bot uploaded!', 'all_players': all_players})
 
         else:
-            return HttpResponse('error')
+            return render(request, self.template_name, {'ms': 'File should be a C or C++ file!', 'all_players': all_players})
 
     def matchGame(self, request):
-        player = Profile.objects.get(user=request.user)
-        temp = User.objects.get(username = request.POST['players'])
-        opp = Profile.objects.get(user = temp)
+        pro = User.objects.all()
+        au = request.user.is_authenticated
+        curr_obj = request.user
+        prof = Profile.objects.get(user=curr_obj)
+        opp_id = request.POST['players']
+        if not opp_id:
+            return render(request, self.template_name,
+                          {'ms': 'Please Select an opponent', 'au': au, 'pro': pro, 'opp': 41})
+        my_id = curr_obj.pk
+        match = str(my_id) + 'v' + opp_id
+        reverse_match = opp_id + 'v' + str(my_id)
+        for match_temp in request_queue:
+            if match_temp.identifier_string == match:
+                return render(request, self.template_name, {'ms': 'Match is already in queue', 'au': au, 'pro': pro,
+                                                            'username': request.user.username, 'opp': int(opp_id)})
 
-        error_file = open(("matches/" + "error" + str(player.pk) + "v" + str(opp.pk)), "w+")
-        error_file.close()
-        error_rev_file = open(("matches/" + "error" + str(opp.pk) + "v" + str(player.pk)), "w+")
-        error_rev_file.close()
-
-        log_file = open(("matches/" + "log" + str(player.pk) + "v" + str(opp.pk)), "w+")
-        log_file.close()
-        log_rev_file = open(("matches/" + "log" + str(opp.pk) + "v" + str(player.pk)), "w+")
-        log_rev_file.close()
-
-        return HttpResponse(str(player.bot_path)+'<br>'+str(opp.bot_path))
+        ext1 = prof.bot_ext
+        opp_user = User.objects.get(pk=int(opp_id))
+        ext2 = Profile.objects.get(user=opp_user).bot_ext
+        result = parseCompileTest(my_id, ext1, opp_id, ext2)
+        if result is not None:
+            print(result)
+            return render(request, self.template_name,
+                          {'ms': result, 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})
+        if os.path.isfile(match_path + 'log' + match):
+            os.remove(match_path + 'log' + match)
+            os.remove(match_path + 'error' + match)
+        if os.path.isfile(match_path + 'log' + reverse_match):
+            os.remove(match_path + 'log' + reverse_match)
+            os.remove(match_path + 'error' + reverse_match)
+        match_obj = SandboxRequest(
+            user1_id=my_id, user2_id=opp_id, bot1_ext=ext1, bot2_ext=ext2)
+        print("Temp", match_obj)
+        request_queue.append(match_obj)
+        match_runner.set_flag()
+        return render(request, self.template_name, {'ms': 'Match requested!', 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})
 
     def viewLogs(self, request):
-        player = Profile.objects.get(user=request.user)
-        temp = User.objects.get(username = request.POST['players'])
-        opp = Profile.objects.get(user = temp)
+        player = request.user
+        opp_id = request.POST['players']
+        temp = User.objects.get(username=opp_id)
+        opp = User.objects.get(pk=opp_id)
+        pro = User.objects.all()
+        au = request.user.is_authenticated
 
         if 'Player2' not in request.POST:
             try:
-                error_file = open(("matches/" + "error" + str(player.pk) + "v" + str(opp.pk)), "r")
-                try:
-                    log_file = open(("matches/" + "log" + str(player.pk) + "v" + str(opp.pk)), "r")
-                    log_file.close()
-                except:
-                    print("Log File Not Found!")
-                    return
+                error_file = open(
+                    (match_path + "error" + str(player.pk) + "v" + str(opp.pk)), "r")
+                error_pass = error_file.read().split('\n')
                 error_file.close()
             except:
-                print("Error File Not Found!")
-                return
-            return HttpResponse("exists1")
+                return render(request, self.template_name, {'ms': 'Match not processed yet!', 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})
+
+            if os.path.isfile(match_path + "log" + str(player.pk) + "v" + str(opp.pk)):
+                log_file = open(match_path + "log" +
+                                str(player.pk) + "v" + str(opp.pk), "r")
+                log_pass = log_file.read().split('\n')
+                log_file.close()
 
         else:
             try:
-                error_rev_file = open(("matches/" + "error" + str(opp.pk) + "v" + str(player.pk)), "r")
-                try:
-                    log_rev_file = open(("matches/" + "log" + str(opp.pk) + "v" + str(player.pk)), "r")
-                    log_rev_file.close()
-                except:
-                    print("Log File Not Found!")
-                    return
-                error_rev_file.close()
+                error_rev_file = open(
+                    (match_path + "error" + str(opp.pk) + "v" + str(player.pk)), "r")
+                error_pass = error_file.read().split('\n')
+                error_file.close()
             except:
-                print("Error File Not Found!")
-                return
-            return HttpResponse("exists2")
+                return render(request, self.template_name, {'ms': 'Match not processed yet!', 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})
+
+            if os.path.isfile(match_path + "log" + str(opp.pk) + "v" + str(player.pk)):
+                log_file = open(match_path + "log" +
+                                str(opp.pk) + "v" + str(player.pk), "r")
+                log_pass = log_file.read().split('\n')
+                log_file.close()
+
+        return render(request, self.template_name, {'error_pass': error_pass, 'log_pass': log_pass, 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})
