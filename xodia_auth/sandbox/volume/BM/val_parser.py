@@ -1,5 +1,5 @@
 
-# We are using 1 and 0 to denote players. 1->makes 1st move.
+# We are using 0 and 1 to denote players. 0->makes 1st move.
 
 
 def parser_func(data, popen_val_obj):
@@ -16,7 +16,7 @@ def parser_func(data, popen_val_obj):
         who_won = popen_val_obj.stdout.readline().rstrip('\n')
         how_won = popen_val_obj.stdout.readline().rstrip('\n')
         exception_obj = EndGameError(
-            'w,' + end_move + ',' + how_won, int(who_won))
+            'w,' + end_move + ',' + how_won, who_won)
         raise exception_obj
     elif bucket == "DRAW\n":
         #scores_string = popen_val_obj.stdout.readline().rstrip('\n')

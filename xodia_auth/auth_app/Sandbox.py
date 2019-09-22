@@ -21,7 +21,8 @@ class SandboxRequest:
         self.bot1_ext = kwargs["bot1_ext"]
         self.bot2_ext = kwargs["bot2_ext"]
         self.identifier_string = str(self.user1_id) + 'v' + str(self.user2_id)
-        self.reverse_identifier_string = str(self.user2_id) + 'v' + str(self.user1_id)
+        self.reverse_identifier_string = str(
+            self.user2_id) + 'v' + str(self.user1_id)
 
     def runSandbox(self, marking_scheme):
         # call(["python", "BM.py", self.bot1_ext, self.bot2_ext], cwd=sandbox_path)
@@ -32,25 +33,28 @@ class SandboxRequest:
         copyfile(executables_path + str(id1), executables_path + "player1")
         copyfile(executables_path + str(id2), executables_path + "player2")
 
-        subprocess.Popen(['chmod','u+x',executables_path + "player1"], stdout=subprocess.PIPE,
+        subprocess.Popen(['chmod', 'u+x', executables_path + "player1"], stdout=subprocess.PIPE,
                          stdin=subprocess.PIPE, stderr=subprocess.PIPE)
 
         subprocess.Popen(['chmod', 'u+x', executables_path + "player2"], stdout=subprocess.PIPE,
                          stdin=subprocess.PIPE, stderr=subprocess.PIPE)
 
-
         f = open("check_file", 'a')
         f.write("Request:"+self.identifier_string+'\n')
         f.close()
-        winner_of_match_1 = SandboxInit(self.bot1_ext, self.bot2_ext, self.identifier_string, "False")
-        if (self.identifier_string == self.reverse_identifier_string) or (winner_of_match_1==255):
+        winner_of_match_1 = SandboxInit(
+            self.bot1_ext, self.bot2_ext, self.identifier_string, "False")
+        if (self.identifier_string == self.reverse_identifier_string) or (winner_of_match_1 == 255):
             # f.write("Here\n")
-            print("Temp" , logfile_src_path + self.identifier_string)
+            print("Temp", logfile_src_path + self.identifier_string)
 
-            move(logfile_src_path + self.identifier_string, match_path + "log" + self.identifier_string)
-            move(errfile_src_path + self.identifier_string, match_path + "error" + self.identifier_string)
+            move(logfile_src_path + self.identifier_string,
+                 match_path + "log" + self.identifier_string)
+            move(errfile_src_path + self.identifier_string,
+                 match_path + "error" + self.identifier_string)
             return
-        winner_of_match_2 = SandboxInit(self.bot1_ext, self.bot2_ext, self.reverse_identifier_string, "True")
+        winner_of_match_2 = SandboxInit(
+            self.bot1_ext, self.bot2_ext, self.reverse_identifier_string, "True")
         if winner_of_match_2 == 102:
             winner_of_match_2 = 101
         elif winner_of_match_2 == 101:
@@ -66,10 +70,14 @@ class SandboxRequest:
         self.relocate_log_files()
 
     def relocate_log_files(self):
-        move(logfile_src_path + self.identifier_string, match_path + "log" + self.identifier_string)
-        move(logfile_src_path + self.reverse_identifier_string, match_path + "log" + self.reverse_identifier_string)
-        move(errfile_src_path + self.identifier_string, match_path + "error" + self.identifier_string)
-        move(errfile_src_path + self.reverse_identifier_string, match_path + "error" + self.reverse_identifier_string)
+        move(logfile_src_path + self.identifier_string,
+             match_path + "log" + self.identifier_string)
+        move(logfile_src_path + self.reverse_identifier_string,
+             match_path + "log" + self.reverse_identifier_string)
+        move(errfile_src_path + self.identifier_string,
+             match_path + "error" + self.identifier_string)
+        move(errfile_src_path + self.reverse_identifier_string,
+             match_path + "error" + self.reverse_identifier_string)
 
     def stage2_marking(self, winner_of_match):
         my_myuser_obj = User.objects.get(pk=self.user1_id)
@@ -77,16 +85,16 @@ class SandboxRequest:
         if winner_of_match == 100:  # If draw occurs
             my_myuser_obj.userprofile.gdrawn += 1
             opponent_myuser_obj.userprofile.gdrawn += 1
-            my_myuser_obj.userprofile.points +=1
-            opponent_myuser_obj.userprofile.points += 1
+            my_myuser_obj.userprofile.score += 0
+            opponent_myuser_obj.userprofile.score += 0
         # if requester has won
         elif winner_of_match == 101:
-            my_myuser_obj.userprofile.points += 3
+            my_myuser_obj.userprofile.score += 2
             my_myuser_obj.userprofile.gwon += 1
             opponent_myuser_obj.userprofile.glost += 1
         # If requester has lost
         elif winner_of_match == 102:
-            opponent_myuser_obj.userprofile.points += 3
+            opponent_myuser_obj.userprofile.score += 2
             my_myuser_obj.userprofile.glost += 1
             opponent_myuser_obj.userprofile.gwon += 1
         my_myuser_obj.save()
@@ -99,16 +107,16 @@ class SandboxRequest:
         opponent_myuser_obj = User.objects.get(pk=self.user2_id)
 
         if winner_of_match == 100:
-            my_myuser_obj.userprofile.points += 1
-            opponent_myuser_obj.userprofile.points += 1
+            my_myuser_obj.userprofile.score += 0
+            opponent_myuser_obj.userprofile.score += 0
             my_myuser_obj.userprofile.gdrawn += 1
             opponent_myuser_obj.userprofile.gdrawn += 1
         elif winner_of_match == 101:
-            my_myuser_obj.userprofile.points += 2
+            my_myuser_obj.userprofile.score += 2
             my_myuser_obj.userprofile.gwon += 1
             opponent_myuser_obj.userprofile.glost += 1
         elif winner_of_match == 102:
-            opponent_myuser_obj.userprofile.points += 2
+            opponent_myuser_obj.userprofile.score += 2
             my_myuser_obj.userprofile.glost += 1
             opponent_myuser_obj.userprofile.gwon += 1
         my_myuser_obj.save()

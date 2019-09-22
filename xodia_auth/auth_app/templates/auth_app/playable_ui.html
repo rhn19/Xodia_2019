@@ -251,14 +251,11 @@
                   type="text"
                   style="width:20rem;height:30px;color: black;border-radius:10px;margin:5px;padding-left:20px"
                   placeholder="String Input..."
-                  hidden
                 />
                 <button
                   style="font-size:0.7rem;"
                   class="btn button-primary col-2"
                   id="stringbtn"
-                  onclick="stringInput()"
-                  hidden
                 >
                   Submit
                 </button>
@@ -266,18 +263,13 @@
             </div>
             <div class="row" style="margin-top:2rem;padding-left:0.5rem">
               <div class="col-lg-4">
-                <button
-                  id="undo"
-                  onclick="undomove()"
-                  class="btn button-primary"
-                  hidden
-                >
+                <button id="undo" class="btn button-primary">
                   Undo Move
                 </button>
               </div>
               <div>
                 <button
-                  id="undo"
+                  id="restart"
                   onclick="history.go(0)"
                   class="btn button-primary"
                 >

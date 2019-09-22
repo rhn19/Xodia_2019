@@ -1,435 +1,482 @@
+/*
+	Repitition draw functionality added
+*/
+
 #include <iostream>
-#include <string.h>
+#include <math.h>
+#include <map>
+#include <vector>
+#include <chrono>
 using namespace std;
-char board[5][5];/*=
-    {		//use this for testing otherwise initBoard is called in main
+using namespace std::chrono;
+#define white 0
+#define black 1
+#define invalid 1000
+#define infinity 1000000
 
-        {'_', '_', '_', '_', '_'},
-        {'_', 'W', '_', '_', '_'},
-        {'_', 'b', 'W', 'W', '_'},
-        {'_', '_', '_', 'B', 'b'},
-        {'_', 'b', 'b', 'b', 'b'},
+int maxDepth = 4;
 
-    };*/
-int flag = 0, Wm = 0, Wp = 0, Bm = 0, Bp = 0;
+class bot;
 
-bool whosemove = 1;
-int result;
-int sum1 = 0, sum2 = 0, goFlag=0, finale = 0;		//goFlag-> gameoverFlag to check if the mValidation is for gameover()
-char X, Y;
-string s;
+void playAgainstBot(bot b);
+void botvsbot(bot b1, bot b2);
+void play();
 
-class game
+struct Marble
 {
-public:
-	int r, c;
+	int player;
+	int grouping;
+	float centralDistance;
+	Marble(int p = 0, int g = 0, float cD = 0)
+	{
+		player = p;
+		grouping = g;
+		centralDistance = cD;
+	}
 };
-int move();
-int mValidation (game, game);
-void Elimination (game, game);
-void elim_package (game, game, int, int, int);	//it's called from mValidation
-int checkVerticalElimination (game, game);
-int checkHorizontalElimination (game, game, int);
-void colour_generalize (int);
-void makeMove (game, game);
-void displayboard ();
-int gameover ();
-void winner();
 
-int gameover ()
+typedef map<string, Marble> MarbleList;
+
+class Board
 {
-	if(Bm==5)
-	{
-		cout<<"WIN\n";
-		cout<<s<<endl;
-		cout<<"0"<<endl;
-		cout<<"All Bombers Eliminated"<<endl;
+	friend class bot;
+	friend void playAgainstBot(bot b);
+	friend void botvsbot(bot b1, bot b2);
+	friend void play();
 
-		return 1;
-	}
-	else if(Wm==5)
-	{
-		cout<<"WIN\n";
-		cout<<s<<endl;
-		cout<<"1"<<endl;
-		cout<<"All Bombers Eliminated"<<endl;
+	// data members
+	MarbleList marbles;
+	int count[2];
+	string limits[7][2];
+	int active;
 
-		return 1;
-	}
+public:
+	// member functions
+	Board(int a);
+	void display();
+	bool validate(string move);
+	string getDirection(string rdi, string rdf);
+	bool inLimit(string rd);
+	void move(string m);
+	float calcCenterDistance(string pos);
+	string getNeighbour(string pos, string dir);
+	int winner();
+	vector<string> getMarbles(int color);
+	bool movesLeft();
+};
 
-    bool x = whosemove;
-    colour_generalize (x);
-    char X1=X;
-    char Y1=Y;
+Board::Board(int a = white)
+{
+	active = a;
+	count[white] = count[black] = 11;
 
-    game gsinput, gminput;
-    int i, j, k, l;
+	marbles["A4"] = {white};
+	marbles["A5"] = {white};
+	marbles["A6"] = {white};
+	marbles["A7"] = {white};
+	marbles["B3"] = {white};
+	marbles["B4"] = {white};
+	marbles["B5"] = {white};
+	marbles["B6"] = {white};
+	marbles["B7"] = {white};
+	marbles["C4"] = {white};
+	marbles["C5"] = {white};
 
-    for (j = 0; j < 5; j++)
-    {
-        if (board[0][j] == 'W')
-    	{
-    		cout<<"WIN\n";
-    		cout<<s<<endl;
-    		cout<<"0"<<endl;
-    		cout<<"Bomber Reached Home"<<endl;
+	marbles["E3"] = {black};
+	marbles["E4"] = {black};
+	marbles["F1"] = {black};
+	marbles["F2"] = {black};
+	marbles["F3"] = {black};
+	marbles["F4"] = {black};
+	marbles["F5"] = {black};
+	marbles["G1"] = {black};
+	marbles["G2"] = {black};
+	marbles["G3"] = {black};
+	marbles["G4"] = {black};
 
-    		return 1;
-    	}
-        if (board[4][j] == 'B')
-        {
-			cout<<"WIN\n";
-			cout<<s<<endl;
-			cout<<"1"<<endl;
-			cout<<"Bomber Reached Home"<<endl;
-
-			return 1;
-		}
-    }
-
-	for (i = 0; i < 5; i++)
-	{
-		for (j = 0; j < 5; j++)
-		{
-			if (board[i][j] == '_')	//if place on board is blank then continue
-			{
-				continue;
-			}
-			else if (board[i][j] == X1 || board[i][j] == Y1)
-			{
-				gsinput.r = i;
-				gsinput.c = j;
-				for (k = 0; k<=2; k++)
-				{
-					for (l = -2; l <= 2; l++)
-					{
-						if(x==1)
-						{gminput.r = i + k;}
-						else
-						{gminput.r = i - k;}
-						gminput.c = j + l;
-						if (gminput.c <= 4 && gminput.c >= 0 && gminput.r <= 4 && gminput.r >= 0)
-						{
-							goFlag = mValidation (gsinput, gminput);
-							if (goFlag == 1 || goFlag == 2)
-							{
-								return 0;	//still valid moves left
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-    return 2;
+	limits[0][0] = "A4";
+	limits[0][1] = "A7";
+	limits[1][0] = "B3";
+	limits[1][1] = "B7";
+	limits[2][0] = "C2";
+	limits[2][1] = "C7";
+	limits[3][0] = "D1";
+	limits[3][1] = "D7";
+	limits[4][0] = "E1";
+	limits[4][1] = "E6";
+	limits[5][0] = "F1";
+	limits[5][1] = "F5";
+	limits[6][0] = "G1";
+	limits[6][1] = "G4";
 }
 
-void winner()
+void Board::display()
 {
-	if(Wm>Bm)
+	char row = 'A';
+	int dia = 7;
+	for (int i = 0; i < 4; i++)
 	{
-		cout<<"WIN\n";
-		cout<<s<<endl;
-		cout<<"0"<<endl;
-		cout<<"NO MOVES LEFT, 0 HAS MORE BOMBERS LEFT"<<endl;
-	}
-	else if(Bm>Wm)
-	{
-		cout<<"WIN\n";
-		cout<<s<<endl;
-		cout<<"1"<<endl;
-		cout<<"NO MOVES LEFT, 1 HAS MORE BOMBERS LEFT"<<endl;
-
-	}
-	else if(Wm==Bm)
-	{
-		if(Wp>Bp)
+		for (int j = 2 - i; j >= 0; j--)
 		{
-			cout<<"WIN\n";
-			cout<<s<<endl;
-			cout<<"0"<<endl;
-			cout<<"NO MOVES LEFT, 0 HAS MORE STINGERS LEFT"<<endl;
+			cout << " ";
 		}
-		else if(Bp>Wp)
+		cout << row << ". ";
+		for (string j = limits[i][0]; j <= limits[i][1]; j[1]++)
 		{
-			cout<<"WIN\n";
-			cout<<s<<endl;
-			cout<<"1"<<endl;
-			cout<<"NO MOVES LEFT, 1 HAS MORE STINGERS LEFT"<<endl;
+			if (marbles.count(j))
+				(marbles[j].player == black) ? cout << "B " : cout << "W ";
+			else
+				cout << "_ ";
+		}
+		cout << endl;
+		row++;
+	}
+	for (int i = 4; i < 7; i++)
+	{
+		for (int j = 0; j < i - 3; j++)
+		{
+			cout << " ";
+		}
+		cout << row << ". ";
+		for (string j = limits[i][0]; j <= limits[i][1]; j[1]++)
+		{
+			if (marbles.count(j))
+				(marbles[j].player == black) ? cout << "B " : cout << "W ";
+			else
+				cout << "_ ";
+		}
+		cout << dia << endl;
+		row++;
+		dia--;
+	}
+	cout << "       1 2 3 4" << endl;
+}
+
+string Board::getDirection(string rdi, string rdf)
+{
+	if (rdi[0] == rdf[0]) // along same row
+	{
+		if (rdi[1] < rdf[1])
+			return "EE"; // going east
+		else
+			return "WW"; // going west
+	}
+	else if (rdi[1] == rdf[1]) // along same diagonal
+	{
+		if (rdi[0] < rdf[0])
+			return "SE";
+		else
+			return "NW";
+	}
+	else // along NE direction
+	{
+		if (rdi[0] < rdf[0])
+			return "SW";
+		else
+			return "NE";
+	}
+}
+
+bool Board::inLimit(string rd)
+{
+	int i = rd[0] - 65;
+	if (i < 0 || i > 6)
+		return false;
+	if (rd >= limits[i][0] && rd <= limits[i][1])
+		return true;
+	return false;
+}
+
+bool Board::validate(string move)
+{
+	string m1 = move.substr(0, 2);
+	string m2 = move.substr(3, 2);
+	string dir = getDirection(m1, m2);
+	int deltaX = 0, deltaY = 0;
+	/*
+		deltaX and deltaY will indicate what to add to the current position
+		for west, decrease col; for east increase col....
+	*/
+	if (dir == "WW")
+	{
+		deltaX = 0;
+		deltaY = -1;
+	}
+	else if (dir == "EE")
+	{
+		deltaX = 0;
+		deltaY = 1;
+	}
+	else if (dir == "NW")
+	{
+		deltaX = -1;
+		deltaY = 0;
+	}
+	else if (dir == "SE")
+	{
+		deltaX = 1;
+		deltaY = 0;
+	}
+	else if (dir == "NE")
+	{
+		deltaX = -1;
+		deltaY = 1;
+	}
+	else if (dir == "SW")
+	{
+		deltaX = 1;
+		deltaY = -1;
+	}
+
+	string x = m1;
+	x[0] += deltaX;
+	x[1] += deltaY;
+
+	// more than two selected
+	if (m2 != x)
+		return false;
+
+	// if blank space selected
+	if (marbles.count(m1) == 0 || marbles.count(m2) == 0)
+		return false;
+
+	// opponent is selected or two different marbles are selected
+	if (marbles[m1].player != marbles[m2].player || marbles[m1].player == !active)
+		return false;
+
+	string m3 = m2, m4 = m2;
+	m3[0] += deltaX;
+	m3[1] += deltaY;
+	m4[0] += 2 * deltaX;
+	m4[1] += 2 * deltaY;
+
+	// if new position is not in board
+	if (!inLimit(m3))
+		return false;
+
+	// if three in a row
+	if (marbles.count(m3))
+	{
+		if (marbles[m3].player == active || marbles.count(m4))
+			return false;
+	}
+
+	// corner push check
+	if ((m3 == "A4" && dir == "NW") || (m3 == "A7" && dir == "NE") || (m3 == "D1" && dir == "WW") || (m3 == "D7" && dir == "EE") || (m3 == "G1" && dir == "SW") || (m3 == "G4" && dir == "SE"))
+		return false;
+
+	return true;
+}
+
+void Board::move(string m)
+{
+	string m1 = m.substr(0, 2), m2 = m.substr(3, 2);
+	int deltaX = m2[0] - m1[0], deltaY = m2[1] - m1[1];
+	string m3 = m2, m4 = m2;
+	m3[0] += deltaX;
+	m3[1] += deltaY;
+	m4[0] += 2 * deltaX;
+	m4[1] += 2 * deltaY;
+
+	// marble is being pushed
+	if (marbles.count(m3))
+	{
+		if (!inLimit(m4)) // if marble is being KOed
+		{
+			marbles[m3].player = active;
+			count[!active]--;
+		}
+		else
+			marbles[m4] = {!active};
+		marbles[m3].player = active;
+		marbles[m2].player = active;
+	}
+	// marbles are being moved
+	else
+	{
+		marbles[m3].player = {active};
+	}
+	marbles.erase(m1);
+
+	active = !active;
+}
+
+float Board::calcCenterDistance(string pos)
+{
+	return sqrt((pos[0] - 'D') * (pos[0] - 'D') + (pos[1] - '4') * (pos[1] - '4'));
+}
+
+string Board::getNeighbour(string pos, string dir)
+{
+	if (dir == "EE")
+	{
+		pos[1]++;
+	}
+	else if (dir == "WW")
+	{
+		pos[1]--;
+	}
+	else if (dir == "NE")
+	{
+		pos[0]--;
+		pos[1]++;
+	}
+	else if (dir == "SW")
+	{
+		pos[0]++;
+		pos[1]--;
+	}
+	else if (dir == "SE")
+	{
+		pos[0]++;
+	}
+	else if (dir == "NW")
+	{
+		pos[0]--;
+	}
+	return pos;
+}
+
+int Board::winner()
+{
+	if (count[white] == 7)
+		return black;
+	else if (count[black] == 7)
+		return white;
+	else
+		return -1;
+}
+
+vector<string> Board::getMarbles(int color)
+{
+	vector<string> allMarbles;
+	for (map<string, Marble>::iterator it = marbles.begin(); it != marbles.end(); it++)
+	{
+		if (it->second.player == color)
+			allMarbles.push_back(it->first);
+	}
+	return allMarbles;
+}
+
+bool Board::movesLeft()
+{
+	vector<string> marbleList = getMarbles(active);
+	for (int i = 0; i < marbleList.size(); i++)
+	{
+		string marblePos = marbleList[i];
+		string dirs[] = {"EE", "WW", "NW", "SE", "SW", "NE"};
+		for (int i = 0; i < 6; i++)
+		{
+			string neighbour = this->getNeighbour(marblePos, dirs[i]);
+
+			string tempMove = marblePos + " " + neighbour;
+			if (this->validate(tempMove))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void play()
+{
+	Board board(white);
+	//board.display();
+	string s;
+	vector<string> drawCheck;
+	while (board.winner() == -1)
+	{
+		//cout << "White's Move: ";
+		if (board.movesLeft() == false)
+		{
+			cout << "DRAW\n";
+			return;
+		}
+		getline(cin, s);
+
+		//if(s == "exit")	return;
+
+		if (board.validate(s))
+		{
+			cout << "VALID\n";
+			cout << s << endl;
+			board.move(s);
 		}
 		else
 		{
-			cout<<"DRAW\n";
-			cout<<s<<endl;
-			cout<<whosemove<<endl;
+			cout << "INVALID MOVE!\n";
+			return;
 		}
+
+		if (board.winner() == white)
+		{
+			cout << "WIN\n";
+			cout << "White Wins!\n";
+			cout << "4 dragons knocked off the board!\n";
+			return;
+		}
+		drawCheck.push_back(s);
+		if (drawCheck.size() == 9)
+		{
+			if ((drawCheck[0] == drawCheck[4] && drawCheck[4] == drawCheck[8]) && (drawCheck[1] == drawCheck[5]) && (drawCheck[2] == drawCheck[6]) && (drawCheck[3] == drawCheck[7]))
+			{
+				cout << "DRAW\n";
+				return;
+			}
+			else
+			{
+				drawCheck.erase(drawCheck.begin());
+			}
+		}
+
+		//board.display();
+		//if(board.movesLeft() == false)
+		{
+			cout << "DRAW\n";
+			return;
+		}
+	blackMove:
+		//cout << "Black's Move: ";
+		getline(cin, s);
+
+		if (board.validate(s))
+		{
+			board.move(s);
+			cout << "VALID\n";
+			cout << s << endl;
+		}
+		else
+		{
+			cout << "INVALID MOVE!\n";
+			return;
+		}
+
+		if (board.winner() == black)
+		{
+			cout << "WIN\n";
+			cout << "Black Wins!\n";
+			cout << "4 dragons knocked off the board\n";
+			return;
+		}
+		drawCheck.push_back(s);
+		if (drawCheck.size() == 9)
+		{
+			if ((drawCheck[0] == drawCheck[4] && drawCheck[4] == drawCheck[8]) && (drawCheck[1] == drawCheck[5]) && (drawCheck[2] == drawCheck[6]) && (drawCheck[3] == drawCheck[7]))
+			{
+				cout << "DRAW\n";
+				return;
+			}
+			else
+			{
+				drawCheck.erase(drawCheck.begin());
+			}
+		}
+		////board.display();
 	}
 }
-int mValidation (game sinput, game minput)
+
+int main()
 {
-    int d1, d2, x = whosemove;
-    d1 = minput.r - sinput.r;	// difference between initial and final row position
-    d2 = minput.c - sinput.c;	//difference between initial and final cols position
-    colour_generalize (x);	//generalize all functions to work for either colour
-    if (board[minput.r][minput.c] == '_' && minput.c >= 0 && minput.c <= 4 && minput.r <= 4 && minput.c >= 0)	//check if final position is vacant
-    {
-        if (board[sinput.r][sinput.c] == X)	//moveset for mantri
-	    {
-	        if ((d1 == (2 * x - 1) || d1 == 0) && (d2 == (2 * x - 1) || d2 == -(2 * x - 1) || d2 == 0))	//mantri moves single space in any allowed direction
-	        {
-	            flag = 1;		//signifies valid non-eliminating move,turn passes to opponent
-	        }
-	        else if ((d1 == 2 * (2 * x - 1) && d2 == 0) || (d1 == 0 && (d2 == 2 * (2 * x - 1) || d2 == -2 * (2 * x - 1))))	//moves two spaces, in an elimination move
-	        {
-	            elim_package (sinput, minput, x, d1, d2);	//checks if elimination is possible and sets flag accordingly
-	        }
-	        else
-	        {
-	            flag = 0;
-	        }
-	    }
-        else if (board[sinput.r][sinput.c] == Y)	//moveset for pawn
-	    {
-	        if ((d1 == (2 * x - 1) && d2 == (2 * x - 1)) || (d1 == (2 * x - 1) && d2 == -(2 * x - 1)))	//moves a single space
-	        {
-	            flag = 1;
-	        }
-	        else if ((d1 == 2 * (2 * x - 1) && d2 == 0) || (d1 == 0 && (d2 == 2 * (2 * x - 1) || d2 == -2 * (2 * x - 1))))	//moves two spaces, in an elimination move
-	        {
-	            elim_package (sinput, minput, x, d1, d2);
-	        }
-	        else
-	        {
-	            flag = 0;
-	        }
-	    }
-    }
-    else
-    {
-        flag = 0;
-    }
-    return flag;
-}
-
-void elim_package (game sinput, game minput, int x, int d1, int d2)
-{
-    if (d1 == 2 * (2 * x - 1) && d2 == 0)	//mantri moves two rows up, in an elimination move
-    {
-        flag = checkVerticalElimination (sinput, minput);	//call function that checks conditions for eliminations
-    }
-    else if (d1 == 0 && (d2 == 2 * (2 * x - 1) || d2 == -2 * (2 * x - 1)))	//mantri moves horizontally in elimination move
-    {
-        flag = checkHorizontalElimination (sinput, minput, x);
-    }
-
-}
-
-int checkVerticalElimination (game sinput, game minput)
-{
-    bool x = whosemove;
-    char t1 = board[(sinput.r + minput.r) / 2][(sinput.c + minput.c) / 2];	//target piece  //changing value of X and Y temporarily to detect correct target
-    colour_generalize (!x);
-    if ((t1 == X || t1 == Y))	//check if neighbouring squares and piece being attacked
-    {
-        return 2;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int checkHorizontalElimination (game sinput, game minput, int x)
-{
-    char t1 = board[(sinput.r + minput.r) / 2][(sinput.c + minput.c) / 2];
-    colour_generalize (!x);	//changing value of X and Y temporarily to detect correct target
-    if ((t1 == X || t1 == Y)&& sinput.r!=4 && sinput.r!=0)	//check if neighbouring squares and piece being attacked
-    {
-        return 2;
-    }
-    else
-    {
-        return 0;
-    }
-}
-void Elimination (game sinput, game minput)
-{
-    bool x=!whosemove;
-    colour_generalize(x);
-    char t1 = board[(sinput.r + minput.r) / 2][(sinput.c + minput.c) / 2];
-    if(x==1)
-    {
-        if (t1 == X)
-        {
-        	Bm++;			//increment count for dead mantri
-        }
-        else
-        {
-            Bp++;			//increment count for dead pawn
-        }
-    }
-    else
-    {
-         if (t1 == X)
-	    {
-	        Wm++;			//increment count for dead mantri
-        }
-        else
-	    {
-            Wp++;			//increment count for dead pawn
-	    }
-    }
-    board[(sinput.r + minput.r) / 2][(sinput.c + minput.c) / 2] = '_';
-}
-
-int move ()
-{
-    flag=0;
-	
-    game sinput, minput;
-    int lengths;
-
-    int x = whosemove;
-    colour_generalize (x);
-    //cout << "Enter Input\n";
-    getline(cin, s);
-    lengths=s.size();
-    if(lengths==7)
-    {
-        for(int i=1;i<lengths;i++)
-        {
-        	if(s[i]!=' ')
-        	{
-        		cout<<"INVALID INPUT\n";
-        		return 0;
-        	}
-        	i++;
-        }
-        for(int i=0;i<lengths;i++)
-        {
-        	if((s[i]<48 || s[i]>54))
-        	{
-        		cout<<"INVALID INPUT\n";
-        		return 0;
-        	}
-        	i++;
-        }
-
-        sinput.r = s[0]-48;
-        sinput.c = s[2]-48;
-        minput.r = s[4]-48;
-        minput.c = s[6]-48;
-        if (board[sinput.r][sinput.c] == X || board[sinput.r][sinput.c] == Y)
-        {
-        	flag = mValidation (sinput, minput);	//to check if the selected move is valid
-        	if (flag == 1 || flag == 2)	// 1->non eliminating move 2->eliminating move
-        	{
-        		makeMove(sinput,minput);
-        	}
-        	else if (flag == 0)
-        	{
-        		cout << "INVALID MOVE\n";
-        		return 0;
-        	}
-        }
-        else
-        {
-        	cout << "INVALID PIECE SELECTION\n";
-        	return 0;
-        }
-    }
-    else
-    {
-    	cout<<"INVALID INPUT STRING LENGTH\n";
-    	return 0;
-    }
-    return 1;
-}
-void makeMove (game sinput, game minput)
-{
-    if (flag == 1)
-    {
-        board[minput.r][minput.c] = board[sinput.r][sinput.c];
-        board[sinput.r][sinput.c] = '_';
-    }
-    else if (flag == 2)
-    {
-        board[minput.r][minput.c] = board[sinput.r][sinput.c];
-        board[sinput.r][sinput.c] = '_';
-        Elimination (sinput, minput);
-    }
-}
-
-void colour_generalize (int x)
-{
-    if (x == 0)
-    {
-        X = 'W';			//X initialized to mantri
-        Y = 'w';			//Y initialized to pawn
-    }
-    else
-    {
-        X = 'B';
-        Y = 'b';
-    }
-}
-
-void displayboard ()
-{
-    int i, j;
-    cout << "    0 1 2 3 4\n";
-    cout << "  -----------\n";
-    for (i = 0; i < 5; i++)
-    {
-        cout << i << "|  ";
-        for (j = 0; j < 5; j++)
-	    {
-	        cout << board[i][j] << ' ';
-	    }
-        cout << "\n";
-    }
-}
-
-void initBoard ()
-{
-    for (int i = 0; i < 5; i++)	// Initialize the Board
-    {
-        board[0][i] = 'B';
-        board[1][i] = 'b';
-        board[2][i] = '_';
-        board[3][i] = 'w';
-        board[4][i] = 'W';
-    }
-}
-int main ()
-{
-    	initBoard();
-	int moveOutput=1;
-	int gameOverOutput=0;
-	while(moveOutput && gameOverOutput==0)
-	{
-		int moveOutput=move();	//moveOutput=0(i.e.errors) is handled in move() itself
-		//finale=gameover();
-
-		if(moveOutput==1)
-		{
-
-			int gameOverOutput=gameover();	//gameOverOutput=1 is handled in gameover() itself
-			if(gameOverOutput==0)
-			{
-				cout<<"VALID\n";
-				cout<<s<<endl;	//returns the move as it is
-			}
-			else if(gameOverOutput==2)
-			{
-				winner();
-			}
-			
-		}
-		whosemove=!whosemove;
-	
-	}//finale==0);
-
-	return 0;
+	play();
 }

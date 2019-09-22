@@ -10,7 +10,8 @@ from .__init__ import path
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='userprofile')
     phone_no = models.CharField(max_length=10)
     college_name = models.CharField(max_length=20)
     score = models.IntegerField(default=0)

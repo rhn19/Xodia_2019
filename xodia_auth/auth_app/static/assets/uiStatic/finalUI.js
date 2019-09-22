@@ -1,18 +1,18 @@
-function detectmob() { 
-  if( navigator.userAgent.match(/Android/i)
-  || navigator.userAgent.match(/webOS/i)
-  || navigator.userAgent.match(/iPhone/i)
-  || navigator.userAgent.match(/iPad/i)
-  || navigator.userAgent.match(/iPod/i)
-  || navigator.userAgent.match(/BlackBerry/i)
-  || navigator.userAgent.match(/Windows Phone/i)
-  ){
-     return true;
-   }
-  else {
-     return false;
-   }
- }
+function detectmob() {
+  if (
+    navigator.userAgent.match(/Android/i) ||
+    navigator.userAgent.match(/webOS/i) ||
+    navigator.userAgent.match(/iPhone/i) ||
+    navigator.userAgent.match(/iPad/i) ||
+    navigator.userAgent.match(/iPod/i) ||
+    navigator.userAgent.match(/BlackBerry/i) ||
+    navigator.userAgent.match(/Windows Phone/i)
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
 //Declare and Initialize
 var canvas = document.querySelector("canvas");
 innerWidth = window.innerWidth;
@@ -30,20 +30,22 @@ var p = [];
 var p2 = [];
 var c1 = 0;
 var c2 = 0;
-
+var p3, p4, p5, b, l;
+var pushToken;
+var count1;
 var eliminatePosYDistance = 130;
 var eliminatePosY1 = 105;
 var eliminatePosY2 = 130;
 var gameOver = false;
+var undoButton = document.getElementById("undo");
 
 var s;
 var d;
-if(detectmob()){
+if (detectmob()) {
   s = 200;
   d = 300;
-  canvas.height = 300+260+eliminatePosY2+30;
-}
-else{
+  canvas.height = 300 + 260 + eliminatePosY2 + 30;
+} else {
   s = 350;
   d = 300;
   canvas.height = innerHeight;
@@ -53,7 +55,6 @@ var eliminatePosX = s;
 var eliminatePosX2 = s;
 
 var c = canvas.getContext("2d");
-
 
 class token {
   constructor(m, n, color) {
@@ -81,6 +82,7 @@ class token {
 init();
 
 function init() {
+  console.log(undoButton);
   create_board();
 
   var k = s;
@@ -259,8 +261,14 @@ function check(a, b) {
 }
 
 function showcoords(event) {
-  var x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-  var y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+  var x =
+    event.clientX +
+    document.body.scrollLeft +
+    document.documentElement.scrollLeft;
+  var y =
+    event.clientY +
+    document.body.scrollTop +
+    document.documentElement.scrollTop;
   console.log("Mouse Click Position: ", x, y);
 
   if (!gameOver) {
@@ -359,6 +367,9 @@ function printTurn(t) {
 function move(t1, t2) {
   var count = 0;
   var pass;
+  count1 = 0;
+  var pass;
+  l = undefined;
 
   if (t2.m === t1.m + 50 && Math.ceil(t1.n) === Math.ceil(t2.n)) {
     //Right Horizontal
@@ -386,8 +397,11 @@ function move(t1, t2) {
       }
     } else {
       //Check if token found can be pushed
-      valid2(t1, t2, pass, "horizontalRight");
+      l = valid2(t1, t2, pass, "horizontalRight");
     }
+    p3 = t1;
+    p4 = t2;
+    (p5 = l), (b = 1);
   } else if (t1.m === t2.m + 50 && Math.ceil(t1.n) === Math.ceil(t2.n)) {
     // Left Horizontal
     for (i = 0; i < 11; i++) {
@@ -414,8 +428,11 @@ function move(t1, t2) {
       }
     } else {
       //Check if token found can be pushed
-      valid2(t1, t2, pass, "horizontalLeft");
+      l = valid2(t1, t2, pass, "horizontalLeft");
     }
+    p3 = t1;
+    p4 = t2;
+    (p5 = l), (b = 2);
   } else if (t2.m === t1.m + 25 && Math.ceil(t2.n) === Math.ceil(t1.n + 43.3)) {
     // Diagonal Down Right
     for (i = 0; i < 11; i++) {
@@ -449,8 +466,11 @@ function move(t1, t2) {
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
     } else {
-      valid2(t1, t2, pass, "diagonalDownRight");
+      l = valid2(t1, t2, pass, "diagonalDownRight");
     }
+    p3 = t1;
+    p4 = t2;
+    (p5 = l), (b = 3);
   } else if (t2.m === t1.m - 25 && Math.ceil(t2.n) === Math.ceil(t1.n + 43.3)) {
     //Diagonal Down Left
     for (i = 0; i < 11; i++) {
@@ -483,8 +503,12 @@ function move(t1, t2) {
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
     } else {
-      valid2(t1, t2, pass, "diagonalDownLeft");
+      l = valid2(t1, t2, pass, "diagonalDownLeft");
     }
+    p3 = t1;
+    p4 = t2;
+    p5 = l;
+    b = 4;
   } else if (t2.m === t1.m + 25 && Math.ceil(t2.n) === Math.ceil(t1.n - 43.3)) {
     // Diagonal Up Right
     for (i = 0; i < 11; i++) {
@@ -516,8 +540,11 @@ function move(t1, t2) {
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
     } else {
-      valid2(t1, t2, pass, "diagonalUpRight");
+      l = valid2(t1, t2, pass, "diagonalUpRight");
     }
+    p3 = t1;
+    p4 = t2;
+    (p5 = l), (b = 5);
   } else if (t1.m === t2.m + 25 && Math.ceil(t2.n) === Math.ceil(t1.n - 43.3)) {
     //Diagonal Up Left
     for (i = 0; i < 11; i++) {
@@ -549,8 +576,11 @@ function move(t1, t2) {
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
     } else {
-      valid2(t1, t2, pass, "diagonalUpLeft");
+      l = valid2(t1, t2, pass, "diagonalUpLeft");
     }
+    p3 = t1;
+    p4 = t2;
+    (p5 = l), (b = 6);
   } else {
     console.log("Invalid Move! Please Try Again!");
     messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
@@ -614,6 +644,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p2[pushToken];
     } else if (
       moveDirection === "horizontalLeft" &&
       t2.m - 50 === p2[pushToken].m &&
@@ -647,18 +678,19 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p2[pushToken];
     } else if (
       moveDirection === "diagonalDownRight" &&
       t2.m + 25 === p2[pushToken].m &&
       Math.ceil(t2.n + 43.3) === Math.ceil(p2[pushToken].n)
     ) {
-      console.log("Here1")
+      console.log("Here1");
       if (
         (p2[pushToken].m === getXUpperlimit(p2[pushToken].n) &&
           Math.ceil(p2[pushToken].n) >= Math.ceil(d + 129.9)) ||
         Math.ceil(p2[pushToken].n) === Math.ceil(d + 259.8)
       ) {
-        console.log("Here2")
+        console.log("Here2");
         if (
           p2[pushToken].m === s + 150 &&
           Math.ceil(p2[pushToken].n) === Math.ceil(d + 259.8)
@@ -694,6 +726,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p2[pushToken];
     } else if (
       moveDirection === "diagonalDownLeft" &&
       t2.m - 25 === p2[pushToken].m &&
@@ -739,6 +772,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p2[pushToken];
     } else if (
       moveDirection === "diagonalUpRight" &&
       t2.m + 25 === p2[pushToken].m &&
@@ -784,6 +818,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p2[pushToken];
     } else if (
       moveDirection === "diagonalUpLeft" &&
       t2.m - 25 === p2[pushToken].m &&
@@ -815,6 +850,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
           console.log("Eliminated");
           messagesStatus.innerHTML += "Eliminated!<br>";
         }
+        return p2[pushToken];
       } else if (confirm2(p2[pushToken].m - 25, p2[pushToken].n - 43.3)) {
         //Move and push
         t1.m = t2.m;
@@ -825,6 +861,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         p2[pushToken].n = p2[pushToken].n - 43.3;
         turn = !turn;
         printTurn(turn);
+        return p2[pushToken];
       } else {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
@@ -867,6 +904,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p[pushToken];
     } else if (
       moveDirection === "horizontalLeft" &&
       t2.m - 50 === p[pushToken].m &&
@@ -900,6 +938,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p[pushToken];
     } else if (
       moveDirection === "diagonalDownRight" &&
       t2.m + 25 === p[pushToken].m &&
@@ -945,6 +984,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p[pushToken];
     } else if (
       moveDirection === "diagonalDownLeft" &&
       t2.m - 25 === p[pushToken].m &&
@@ -990,6 +1030,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("hhhInvalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p[pushToken];
     } else if (
       moveDirection === "diagonalUpRight" &&
       t2.m + 25 === p[pushToken].m &&
@@ -1035,6 +1076,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
       }
+      return p[pushToken];
     } else if (
       moveDirection === "diagonalUpLeft" &&
       t2.m - 25 === p[pushToken].m &&
@@ -1066,6 +1108,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
           console.log("Eliminated");
           messagesStatus.innerHTML += "Eliminated<br>";
         }
+        return p[pushToken];
       } else if (confirm2(p[pushToken].m - 25, p[pushToken].n - 43.3)) {
         //Move and push
         t1.m = t2.m;
@@ -1076,6 +1119,7 @@ function valid2(t1, t2, pushToken, moveDirection) {
         p[pushToken].n = p[pushToken].n - 43.3;
         turn = !turn;
         printTurn(turn);
+        return p[pushToken];
       } else {
         console.log("Invalid Move! Please Try Again!");
         messagesStatus.innerHTML += "Invalid Move! Please Try Again<br>";
@@ -1086,6 +1130,171 @@ function valid2(t1, t2, pushToken, moveDirection) {
     }
   }
 
-  console.log(p2[pushToken])
-  console.log(p[pushToken])
+  console.log(p2[pushToken]);
+  console.log(p[pushToken]);
 }
+
+undoButton.onclick = function() {
+  console.log(p5);
+  console.log("Inside undo");
+  if (count1 === 0) {
+    turn = !turn;
+    if (p5 == undefined) {
+      if (b == 1) {
+        p4.m = p3.m;
+        p3.m = p3.m - 50;
+      } else if (b == 2) {
+        p4.m = p3.m;
+        p3.m = p3.m + 50;
+      } else if (b == 3) {
+        p4.m = p3.m;
+        p4.n = p3.n;
+        p3.m = p3.m - 25;
+        p3.n = p3.n - 43.3;
+      } else if (b == 4) {
+        p4.m = p3.m;
+        p4.n = p3.n;
+        p3.m = p3.m + 25;
+        p3.n = p3.n - 43.3;
+      } else if (b == 5) {
+        p4.m = p3.m;
+        p4.n = p3.n;
+        p3.m = p3.m - 25;
+        p3.n = p3.n + 43.3;
+      } else if (b == 6) {
+        p4.m = p3.m;
+        p4.n = p3.n;
+        p3.m = p3.m + 25;
+        p3.n = p3.n + 43.3;
+      }
+      count1++;
+    } else {
+      console.log("2nd case");
+      if (b === 1) {
+        p4.m = p3.m;
+        p3.m = p3.m - 50;
+        p5.m = p5.m - 50;
+      } else if (b === 2) {
+        p4.m = p3.m;
+        p3.m = p3.m + 50;
+        p5.m = p5.m + 50;
+      } else if (b === 3) {
+        p4.m = p3.m;
+        p4.n = p3.n;
+        p3.m = p3.m - 25;
+        p3.n = p3.n - 43.3;
+        p5.m = p5.m - 25;
+        p5.n = p5.n - 43.3;
+      } else if (b === 4) {
+        p4.m = p3.m;
+        p4.n = p3.n;
+        p3.m = p3.m + 25;
+        p3.n = p3.n - 43.3;
+        p5.m = p5.m + 25;
+        p5.n = p5.n - 43.3;
+      } else if (b === 5) {
+        p4.m = p3.m;
+        p4.n = p3.n;
+        p3.m = p3.m - 25;
+        p3.n = p3.n + 43.3;
+        p5.m = p5.m - 25;
+        p5.n = p5.n + 43.3;
+      } else if (b === 6) {
+        p4.m = p3.m;
+        p4.n = p3.n;
+        p3.m = p3.m + 25;
+        p3.n = p3.n + 43.3;
+        p5.m = p5.m + 25;
+        p5.n = p5.n + 43.3;
+      }
+      count1++;
+    }
+  } else alert("UNDO ALLOWED ONLY ONCE!!");
+};
+
+//string input
+var dict = {
+  A: {
+    "4": [s, d],
+    "5": [50 + s, d],
+    "6": [100 + s, d],
+    "7": [150 + s, d]
+  },
+  B: {
+    "3": [s - 25, 43.3 + d],
+    "4": [25 + s, 43.3 + d],
+    "5": [75 + s, 43.3 + d],
+    "6": [125 + s, 43.3 + d],
+    "7": [175 + s, 43.3 + d]
+  },
+  C: {
+    "2": [s - 50, 86.6 + d],
+    "3": [s, 86.6 + d],
+    "4": [50 + s, 86.6 + d],
+    "5": [100 + s, 86.6 + d],
+    "6": [150 + s, 86.6 + d],
+    "7": [200 + s, 86.6 + d]
+  },
+  D: {
+    "1": [s - 75, 129.9 + d],
+    "2": [s - 25, 129.9 + d],
+    "3": [25 + s, 129.9 + d],
+    "4": [75 + s, 129.9 + d],
+    "5": [125 + s, 129.9 + d],
+    "6": [175 + s, 129.9 + d],
+    "7": [225 + s, 129.9 + d]
+  },
+  E: {
+    "1": [s - 50, 173.2 + d],
+    "2": [s, 173.2 + d],
+    "3": [50 + s, 173.2 + d],
+    "4": [100 + s, 173.2 + d],
+    "5": [150 + s, 173.2 + d],
+    "6": [200 + s, 173.2 + d]
+  },
+  F: {
+    "1": [s - 25, 216.5 + d],
+    "2": [25 + s, 216.5 + d],
+    "3": [75 + s, 216.5 + d],
+    "4": [125 + s, 216.5 + d],
+    "5": [175 + s, 216.5 + d]
+  },
+  G: {
+    "1": [s, 259.8 + d],
+    "2": [50 + s, 259.8 + d],
+    "3": [100 + s, 259.8 + d],
+    "4": [150 + s, 259.8 + d]
+  }
+};
+var str;
+document.getElementById("stringbtn").onclick = function() {
+  console.log("Hello");
+  str = document.getElementById("stringip").value;
+  document.getElementById("stringip").value = "";
+  str = str.split(" ");
+  cords1 = dict[str[0][0]][str[0][1]];
+  x1 = cords1[0];
+  y1 = cords1[1];
+
+  cords2 = dict[str[1][0]][str[1][1]];
+  x2 = cords2[0];
+  y2 = cords2[1];
+
+  t = check(x1, y1);
+  u = check(x2, y2);
+
+  console.log(
+    "First token to be selected is " +
+      "(" +
+      x1 +
+      "," +
+      y1 +
+      ")" +
+      "Second token to be selected is " +
+      x2 +
+      "," +
+      y2
+  );
+
+  move(t, u);
+};

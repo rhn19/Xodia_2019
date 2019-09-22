@@ -12,7 +12,7 @@ from sys import exit, argv
 from val_parser import parser_func, EndGameError
 
 time_limits = {
-    "cpp": 2000,
+    "cpp": 5000,
     "c": 2000,
     "py": 6000,
 }
@@ -139,15 +139,15 @@ def end_code(exit_code):
 # So the below line means: if both processes are alive:
 try:
     if not popen_obj1.poll() and not popen_obj2.poll():
-        popen_obj1.stdin.write("1\n")
-        popen_obj2.stdin.write("0\n")  # was 2
+        popen_obj1.stdin.write("0\n")
+        popen_obj2.stdin.write("1\n")
         # This poll method is again different. It belongs to the poll object
         # It represents the time which the poll object will wait to receive an input
         if popen_obj1.poll():
-            log_file.write("i,1,Premature termination")
+            log_file.write("i,0,Premature termination")
             end_code(102)
         if popen_obj2.poll():
-            log_file.write("i,0,Premature termination")
+            log_file.write("i,1,Premature termination")
             end_code(101)
         temp = poll_obj1.poll(time_limit1)
         if temp:  # If temp is not empty, meaning some event occurred
@@ -159,25 +159,27 @@ try:
                     p = popen_obj1.stdout.readline()  # Attempt to read the output. If it blocks, the alarm will go off in one second, and the handler will be called, which will raise an exception. The exception will be caught by the enclosing try-catch block
                     alarm(0)  # If read was successful, disable the alarm
                     intermediate_string = parser_func(p, popen_val_obj)
-                    log_file.write('v,1,' + p)
+                    log_file.write('v,0,' + p)
                     popen_obj2.stdin.write(intermediate_string)
                 except EndGameError as end_ev:
                     log_file.write(str(end_ev))
                     end_code(end_ev.winner)
                 except ValueError as v:
-                    log_file.write('l,1,' + p.rstrip('\n') + ',' + str(v))
+                    log_file.write('l,0,' + p.rstrip('\n') + ',' + str(v))
                     end_code(102)  # was 102
                 except IOError as e:
-                    log_file.write('i,1,kela' + str(e))
-                    end_code(102)
+                    log_file.write('v,0,' + p)
+                    popen_obj2.stdin.write(intermediate_string)
+                    #log_file.write('i,0' + str(e))
+                    # end_code(102)
             else:
-                log_file.write('i,1,No I/O detected')
+                log_file.write('i,0,No I/O detected')
                 end_code(102)
         else:
-            log_file.write('i,1,No I/O detected')
+            log_file.write('i,0,No I/O detected')
             end_code(102)
     else:
-        log_file.write('i,1,Premature termination')
+        log_file.write('i,0,Premature termination')
         end_code(102)
 
     if not popen_obj1.poll() and not popen_obj2.poll():
@@ -189,26 +191,28 @@ try:
                     p = popen_obj2.stdout.readline()
                     alarm(0)
                     intermediate_string = parser_func(p, popen_val_obj)
-                    log_file.write('v,0,' + intermediate_string)
+                    log_file.write('v,1,' + intermediate_string)
                     popen_obj1.stdin.write(intermediate_string)
                 except EndGameError as end_ev:
                     log_file.write(str(end_ev))
                     end_code(end_ev.winner)
                 except ValueError as v:
                     log_file.write(
-                        'l,0,' + intermediate_string.rstrip('\n') + ',' + str(v))  # was 2
+                        'l,1,' + intermediate_string.rstrip('\n') + ',' + str(v))  # was 2
                     end_code(101)
                 except IOError as e:
-                    log_file.write('i,0,' + str(e))
-                    end_code(101)
+                    log_file.write('v,1,' + intermediate_string)
+                    popen_obj1.stdin.write(intermediate_string)
+                    #log_file.write('i,1,' + str(e))
+                    # end_code(101)
             else:
-                log_file.write('i,0,No I/O detected')
+                log_file.write('i,1,No I/O detected')
                 end_code(101)
         else:
-            log_file.write('i,0,No I/O detected')
+            log_file.write('i,1,No I/O detected')
             end_code(101)
     else:
-        log_file.write('i,0,Premature termination')
+        log_file.write('i,1,Premature termination')
         end_code(101)
 
     # The below code is for the while(1) implementation. Used a for loop to run a max of 50 iterations
@@ -222,25 +226,29 @@ try:
                         p = popen_obj1.stdout.readline()
                         alarm(0)
                         intermediate_string = parser_func(p, popen_val_obj)
-                        log_file.write('v,1,' + p)
+                        log_file.write('v,0,' + p)
                         popen_obj2.stdin.write(intermediate_string)
                     except EndGameError as end_ev:
                         log_file.write(str(end_ev))
                         end_code(end_ev.winner)
                     except ValueError as v:
-                        log_file.write('l,1,' + p.rstrip('\n') + ',' + str(v))
+                        log_file.write('l,0,' + p.rstrip('\n') + ',' + str(v))
                         end_code(102)  # was 102
                     except IOError as e:
-                        log_file.write('i,1,kela2' + str(e))
-                        end_code(102)
+                        log_file.write('v,0,' + p)
+                        popen_obj2.stdin.write(intermediate_string)
+                        #log_file.write('i,0' + str(e))
+                        # end_code(102)
                 else:
-                    log_file.write('i,1,No I/O detected')
-                    end_code(102)
+                    log_file.write('v,0,' + p)
+                    popen_obj2.stdin.write(intermediate_string)
+                    #log_file.write('i,0,No I/O detected')
+                    # end_code(102)
             else:
-                log_file.write('i,1,No I/O detected')
+                log_file.write('i,0,No I/O detected')
                 end_code(102)
         else:
-            log_file.write('i,1,Premature termination')
+            log_file.write('i,0,Premature termination')
             end_code(102)
 
         if not popen_obj1.poll() and not popen_obj2.poll():
@@ -262,21 +270,23 @@ try:
                             'l,0,' + intermediate_string.rstrip('\n') + ',' + str(v))
                         end_code(101)
                     except IOError as e:
-                        log_file.write('i,0,' + str(e))
-                        end_code(101)
+                        log_file.write('v,0,' + intermediate_string)  # was 2
+                        popen_obj1.stdin.write(intermediate_string)
+                        #log_file.write('i,1,' + str(e))
+                        # end_code(101)
                 else:
-                    log_file.write('i,0,No I/O detected')
+                    log_file.write('i,1,No I/O detected')
                     end_code(101)
             else:
-                log_file.write('i,0,No I/O detected')
+                log_file.write('i,1,No I/O detected')
                 end_code(101)
         else:
-            log_file.write('i,0,Premature termination')
+            log_file.write('i,1,Premature termination')
             end_code(101)
     else:
-        log_file.write('i,0,Match did not terminate')
+        log_file.write('i,1,Match did not terminate')
         end_code(100)  # was 100
 except Exception as e:
-    print e
+    log_file.write(e)
     end_code(255)
 end_code()

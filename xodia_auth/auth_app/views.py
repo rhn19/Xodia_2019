@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -135,38 +135,43 @@ class PlayableUI(View):
 
 
 class GridView(View):
-    template_name = 'auth_app/buttons.html'
+    template_name = 'auth_app/submit_ui.html'
 
     def get(self, request):
+        au = request.user.is_authenticated
         if request.user.is_authenticated:
             all_players = User.objects.all()
-            return render(request, self.template_name, {'all_players': all_players})
+            return render(request, self.template_name, {'pro': all_players, 'au': au})
         else:
             return HttpResponseRedirect(reverse('user_login'))
 
     def post(self, request):
-        if 'botup' in request.POST:
-            return self.uploadBot(request)
-        elif 'Match' in request.POST:
-            return self.matchGame(request)
-        elif 'Logs' in request.POST:
-            return self.viewLogs(request)
+        if request.user.is_authenticated:
+            if 'upload' in request.POST:
+                return self.uploadBot(request)
+            elif 'matchreq' in request.POST:
+                return self.matchGame(request)
+            elif 'viewlog' in request.POST:
+                return self.viewLogs(request)
+            else:
+                return HttpResponse('wrong')
         else:
-            return HttpResponse('upload a file jackass')
+            return redirect('user_login')
 
     def uploadBot(self, request):
         player = Profile.objects.get(user=request.user)
+        au = request.user.is_authenticated
         all_players = User.objects.all()
-        play = request.FILES['Bot_file']
+        play = request.FILES['botup']
 
         ext = play.name.split('.')[-1]
         if play.size > 1000000:
-            return render(request, self.template_name, {'ms': 'File size should be less than 1 MB!', 'all_players': all_players})
+            return render(request, self.template_name, {'ms': 'File size should be less than 1 MB!', 'pro': all_players, 'au': au})
 
         if ext in ['cpp', 'c']:
             old_file = player.bot_path + '.' + player.bot_ext
-            os.remove(old_file)
             new_file = player.bot_path + '.' + ext
+            os.rename(old_file, new_file)
             f = open(new_file, 'w+')
 
             for chunk in play.chunks():
@@ -176,17 +181,17 @@ class GridView(View):
             player.bot_ext = ext
 
             player.save()
-            return render(request, self.template_name, {'ms': 'Bot uploaded!', 'all_players': all_players})
+            return render(request, self.template_name, {'ms': 'Bot uploaded!', 'pro': all_players, 'au': au})
 
         else:
-            return render(request, self.template_name, {'ms': 'File should be a C or C++ file!', 'all_players': all_players})
+            return render(request, self.template_name, {'ms': 'File should be a C or C++ file!', 'pro': all_players, 'au': au})
 
     def matchGame(self, request):
         pro = User.objects.all()
         au = request.user.is_authenticated
         curr_obj = request.user
         prof = Profile.objects.get(user=curr_obj)
-        opp_id = request.POST['players']
+        opp_id = request.POST['oppid']
         if not opp_id:
             return render(request, self.template_name,
                           {'ms': 'Please Select an opponent', 'au': au, 'pro': pro, 'opp': 41})
@@ -220,14 +225,15 @@ class GridView(View):
         return render(request, self.template_name, {'ms': 'Match requested!', 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})
 
     def viewLogs(self, request):
+        print 'inview'
         player = request.user
-        opp_id = request.POST['players']
-        temp = User.objects.get(username=opp_id)
+        opp_id = request.POST['oppid']
         opp = User.objects.get(pk=opp_id)
         pro = User.objects.all()
         au = request.user.is_authenticated
-
-        if 'Player2' not in request.POST:
+        p2flag = request.POST.get('p2flag')
+        print("p2flag"+str(p2flag))
+        if not p2flag:
             try:
                 error_file = open(
                     (match_path + "error" + str(player.pk) + "v" + str(opp.pk)), "r")
@@ -244,7 +250,7 @@ class GridView(View):
 
         else:
             try:
-                error_rev_file = open(
+                error_file = open(
                     (match_path + "error" + str(opp.pk) + "v" + str(player.pk)), "r")
                 error_pass = error_file.read().split('\n')
                 error_file.close()
@@ -257,4 +263,4 @@ class GridView(View):
                 log_pass = log_file.read().split('\n')
                 log_file.close()
 
-        return render(request, self.template_name, {'error_pass': error_pass, 'log_pass': log_pass, 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})
+        return render(request, self.template_name, {'error': error_pass, 'log': log_pass, 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})

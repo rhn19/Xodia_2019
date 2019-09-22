@@ -7,5 +7,5 @@ urlpatterns = [
     url(r'^logout/$', LogoutView.as_view(), name="user_logout"),
     url(r'^register/$', RegisterView.as_view(), name="user_register"),
     url(r'^play/$', PlayableUI.as_view(), name="playable_ui"),
-    url(r'^upload/$', GridView.as_view(), name="grid"),
+    url(r'^submit/$', GridView.as_view(), name="grid"),
 ]
