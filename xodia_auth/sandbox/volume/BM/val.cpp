@@ -388,11 +388,13 @@ void play()
 	while (board.winner() == -1)
 	{
 		//cout << "White's Move: ";
+		/*
 		if (board.movesLeft() == false)
 		{
 			cout << "DRAW\n";
 			return;
 		}
+		*/
 		getline(cin, s);
 
 		//if(s == "exit")	return;
@@ -416,6 +418,7 @@ void play()
 			cout << "4 dragons knocked off the board!\n";
 			return;
 		}
+		/*
 		drawCheck.push_back(s);
 		if (drawCheck.size() == 9)
 		{
@@ -436,6 +439,7 @@ void play()
 			cout << "DRAW\n";
 			return;
 		}
+		*/
 	blackMove:
 		//cout << "Black's Move: ";
 		getline(cin, s);
@@ -459,6 +463,7 @@ void play()
 			cout << "4 dragons knocked off the board\n";
 			return;
 		}
+		/*
 		drawCheck.push_back(s);
 		if (drawCheck.size() == 9)
 		{
@@ -472,6 +477,7 @@ void play()
 				drawCheck.erase(drawCheck.begin());
 			}
 		}
+		*/
 		////board.display();
 	}
 }

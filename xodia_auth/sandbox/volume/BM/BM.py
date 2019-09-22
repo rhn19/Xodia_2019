@@ -260,17 +260,17 @@ try:
                         p = popen_obj2.stdout.readline()
                         alarm(0)
                         intermediate_string = parser_func(p, popen_val_obj)
-                        log_file.write('v,0,' + intermediate_string)  # was 2
+                        log_file.write('v,1,' + intermediate_string)  # was 2
                         popen_obj1.stdin.write(intermediate_string)
                     except EndGameError as end_ev:
                         log_file.write(str(end_ev))
                         end_code(end_ev.winner)
                     except ValueError as v:
                         log_file.write(
-                            'l,0,' + intermediate_string.rstrip('\n') + ',' + str(v))
+                            'l,1,' + intermediate_string.rstrip('\n') + ',' + str(v))
                         end_code(101)
                     except IOError as e:
-                        log_file.write('v,0,' + intermediate_string)  # was 2
+                        log_file.write('v,1,' + intermediate_string)  # was 2
                         popen_obj1.stdin.write(intermediate_string)
                         #log_file.write('i,1,' + str(e))
                         # end_code(101)
