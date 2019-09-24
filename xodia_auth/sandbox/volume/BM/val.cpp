@@ -401,7 +401,7 @@ void play()
 			{
 				cout << "WIN\n";
 				cout << s << endl;
-				cout << "1\n";
+				cout << "0\n";
 				cout << "4 dragons knocked off the board!\n";
 				return;
 			}
@@ -449,7 +449,7 @@ void play()
 			{
 				cout << "WIN\n";
 				cout << s << endl;
-				cout << "0\n";
+				cout << "1\n";
 				cout << "4 dragons knocked off the board\n";
 				return;
 			}
