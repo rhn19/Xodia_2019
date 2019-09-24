@@ -16,14 +16,14 @@ def parser_func(data, popen_val_obj):
         who_won = popen_val_obj.stdout.readline().rstrip('\n')
         how_won = popen_val_obj.stdout.readline().rstrip('\n')
         exception_obj = EndGameError(
-            'w,' + end_move + ',' + how_won, who_won)
+            'w,' + end_move + ',' + how_won, int(who_won))
         raise exception_obj
     elif bucket == "DRAW\n":
         #scores_string = popen_val_obj.stdout.readline().rstrip('\n')
         end_move = popen_val_obj.stdout.readline().rstrip('\n')
-        turn_string = popen_val_obj.stdout.readline().rstrip('\n')
+        #turn_string = popen_val_obj.stdout.readline().rstrip('\n')
         exception_obj = EndGameError(
-            'd,' + end_move + ',' + turn_string, -1)  # change 0 to -1?
+            'd,' + end_move, -1)  # change 0 to -1?
         raise exception_obj
     else:
         raise ValueError(bucket)

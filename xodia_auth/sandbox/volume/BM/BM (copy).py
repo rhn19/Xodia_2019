@@ -159,8 +159,27 @@ try:
                     p = popen_obj1.stdout.readline()  # Attempt to read the output. If it blocks, the alarm will go off in one second, and the handler will be called, which will raise an exception. The exception will be caught by the enclosing try-catch block
                     alarm(0)  # If read was successful, disable the alarm
                     intermediate_string = parser_func(p, popen_val_obj)
-                    log_file.write('v,0,' + p)
-                    popen_obj2.stdin.write(intermediate_string)
+                    print(intermediate_string)
+                    if intermediate_string[0] != -2:
+                        print "in1"
+                        log_file.write('v,0,' + intermediate_string[0])
+                        print(intermediate_string)
+                        popen_obj1.stdin.write(intermediate_string[0])
+                    else:
+                        if intermediate_string[3] == 0:
+                            log_file.write(
+                                'w,'+intermediate_string[1], ','+intermediate_string[2])
+                            end_code(102)
+                        elif intermediate_string[3] == 1:
+                            log_file.write(
+                                'w,'+intermediate_string[1], ','+intermediate_string[2])
+                            end_code(101)
+                        elif intermediate_string[3] == -1:
+                            log_file.write(
+                                'd,'+intermediate_string[1])
+                            end_code(100)
+                    #log_file.write('v,0,' + p)
+                    # popen_obj2.stdin.write(intermediate_string)
                 except EndGameError as end_ev:
                     log_file.write(str(end_ev))
                     end_code(end_ev.winner)
@@ -168,15 +187,32 @@ try:
                     log_file.write('l,0,' + p.rstrip('\n') + ',' + str(v))
                     end_code(102)  # was 102
                 except IOError as e:
-                    try:
-                        log_file.write('v,0,' + p)
-                        popen_obj2.stdin.write(intermediate_string)
+                    # try:
+                    intermediate_string = parser_func(p, popen_val_obj)
+                    if intermediate_string[0] != -2:
+                        print(intermediate_string)
+                        log_file.write('v,0,' + intermediate_string[0])
+                        popen_obj1.stdin.write(intermediate_string[0])
+                    else:
+                        if intermediate_string[3] == 0:
+                            log_file.write(
+                                'w,'+intermediate_string[1], ','+intermediate_string[2])
+                            end_code(102)
+                        elif intermediate_string[3] == 1:
+                            log_file.write(
+                                'w,'+intermediate_string[1], ','+intermediate_string[2])
+                            end_code(101)
+                        elif intermediate_string[3] == -1:
+                            log_file.write(
+                                'd,'+intermediate_string[1])
+                            end_code(100)
+                        #log_file.write('v,0,' + p)
+                        # popen_obj2.stdin.write(intermediate_string)
                     #log_file.write('i,0' + str(e))
                     # end_code(102)
-                    except EndGameError as end_ev:
-                        intermediate_string = parser_func(p, popen_val_obj)
-                        log_file.write(str(end_ev))
-                        end_code(end_ev.winner)
+                    # except EndGameError as end_ev:
+                    #    log_file.write(str(end_ev))
+                    #    end_code(end_ev.winner)
             else:
                 log_file.write('i,0,No I/O detected')
                 end_code(102)
@@ -196,8 +232,22 @@ try:
                     p = popen_obj2.stdout.readline()
                     alarm(0)
                     intermediate_string = parser_func(p, popen_val_obj)
-                    log_file.write('v,1,' + intermediate_string)
-                    popen_obj1.stdin.write(intermediate_string)
+                    if intermediate_string[0] != 2:
+                        log_file.write('v,1,' + intermediate_string[0])
+                        popen_obj1.stdin.write(intermediate_string[0])
+                    else:
+                        if intermediate_string[3] == 0:
+                            log_file.write(
+                                'w,'+intermediate_string[1], ','+intermediate_string[2])
+                            end_code(102)
+                        elif intermediate_string[3] == 1:
+                            log_file.write(
+                                'w,'+intermediate_string[1], ','+intermediate_string[2])
+                            end_code(101)
+                        elif intermediate_string[3] == -1:
+                            log_file.write(
+                                'd,'+intermediate_string[1])
+                            end_code(100)
                 except EndGameError as end_ev:
                     log_file.write(str(end_ev))
                     end_code(end_ev.winner)
@@ -206,15 +256,33 @@ try:
                         'l,1,' + intermediate_string.rstrip('\n') + ',' + str(v))  # was 2
                     end_code(101)
                 except IOError as e:
-                    try:
+                    # try:
+                    intermediate_string = parser_func(p, popen_val_obj)
+                    if intermediate_string[0] != -2:
+                        log_file.write('v,1,' + intermediate_string[0])
+                        popen_obj1.stdin.write(intermediate_string[0])
+                    else:
+                        if intermediate_string[3] == 0:
+                            log_file.write(
+                                'w,'+intermediate_string[1], ','+intermediate_string[2])
+                            end_code(102)
+                        elif intermediate_string[3] == 1:
+                            log_file.write(
+                                'w,'+intermediate_string[1], ','+intermediate_string[2])
+                            end_code(101)
+                        elif intermediate_string[3] == -1:
+                            log_file.write(
+                                'd,'+intermediate_string[1])
+                            end_code(100)
+                    """
                         log_file.write('v,1,' + intermediate_string)
                         popen_obj1.stdin.write(intermediate_string)
                     except EndGameError as end_ev:
-                        intermediate_string = parser_func(p, popen_val_obj)
                         log_file.write(str(end_ev))
                         end_code(end_ev.winner)
                     #log_file.write('i,1,' + str(e))
                     # end_code(101)
+                    """
             else:
                 log_file.write('i,1,No I/O detected')
                 end_code(101)
@@ -236,8 +304,24 @@ try:
                         p = popen_obj1.stdout.readline()
                         alarm(0)
                         intermediate_string = parser_func(p, popen_val_obj)
-                        log_file.write('v,0,' + p)
-                        popen_obj2.stdin.write(intermediate_string)
+                        if intermediate_string[0] != -2:
+                            log_file.write('v,0,' + intermediate_string[0])
+                            popen_obj1.stdin.write(intermediate_string[0])
+                        else:
+                            if intermediate_string[3] == 0:
+                                log_file.write(
+                                    'w,'+intermediate_string[1], ','+intermediate_string[2])
+                                end_code(102)
+                            elif intermediate_string[3] == 1:
+                                log_file.write(
+                                    'w,'+intermediate_string[1], ','+intermediate_string[2])
+                                end_code(101)
+                            elif intermediate_string[3] == -1:
+                                log_file.write(
+                                    'd,'+intermediate_string[1])
+                                end_code(100)
+                        #log_file.write('v,0,' + p)
+                        # popen_obj2.stdin.write(intermediate_string)
                     except EndGameError as end_ev:
                         log_file.write(str(end_ev))
                         end_code(end_ev.winner)
@@ -245,20 +329,35 @@ try:
                         log_file.write('l,0,' + p.rstrip('\n') + ',' + str(v))
                         end_code(102)  # was 102
                     except IOError as e:
-                        try:
-                            intermediate_string = parser_func(p, popen_val_obj)
-                            log_file.write('v,0,' + p)
-                            popen_obj2.stdin.write(intermediate_string)
+                        # try:
+                        intermediate_string = parser_func(p, popen_val_obj)
+                        print(intermediate_string)
+                        if intermediate_string[0] != -2:
+                            log_file.write('v,0,' + intermediate_string[0])
+                            popen_obj1.stdin.write(intermediate_string[0])
+                        else:
+                            if intermediate_string[3] == 0:
+                                log_file.write(
+                                    'w,'+intermediate_string[1], ','+intermediate_string[2])
+                                end_code(102)
+                            elif intermediate_string[3] == 1:
+                                log_file.write(
+                                    'w,'+intermediate_string[1], ','+intermediate_string[2])
+                                end_code(101)
+                            elif intermediate_string[3] == -1:
+                                log_file.write(
+                                    'd,'+intermediate_string[1])
+                                end_code(100)
+                            #log_file.write('v,0,' + p)
+                            # popen_obj2.stdin.write(intermediate_string)
                         #log_file.write('i,0' + str(e))
                         # end_code(102)
-                        except EndGameError as end_ev:
-                            log_file.write(str(end_ev))
-                            end_code(end_ev.winner)
+                        # except EndGameError as end_ev:
+                        #    log_file.write(str(end_ev))
+                        #    end_code(end_ev.winner)
                 else:
-                    log_file.write('v,0,' + p)
-                    popen_obj2.stdin.write(intermediate_string)
-                    #log_file.write('i,0,No I/O detected')
-                    # end_code(102)
+                    log_file.write('i,0,No I/O detected')
+                    end_code(102)
             else:
                 log_file.write('i,0,No I/O detected')
                 end_code(102)
@@ -275,8 +374,24 @@ try:
                         p = popen_obj2.stdout.readline()
                         alarm(0)
                         intermediate_string = parser_func(p, popen_val_obj)
-                        log_file.write('v,1,' + intermediate_string)  # was 2
-                        popen_obj1.stdin.write(intermediate_string)
+                        if intermediate_string[0] != -2:
+                            log_file.write('v,1,' + intermediate_string[0])
+                            popen_obj1.stdin.write(intermediate_string[0])
+                        else:
+                            if intermediate_string[3] == 0:
+                                log_file.write(
+                                    'w,'+intermediate_string[1], ','+intermediate_string[2])
+                                end_code(102)
+                            elif intermediate_string[3] == 1:
+                                log_file.write(
+                                    'w,'+intermediate_string[1], ','+intermediate_string[2])
+                                end_code(101)
+                            elif intermediate_string[3] == -1:
+                                log_file.write(
+                                    'd,'+intermediate_string[1])
+                                end_code(100)
+                        # log_file.write('v,1,' + intermediate_string)  # was 2
+                        # popen_obj1.stdin.write(intermediate_string)
                     except EndGameError as end_ev:
                         log_file.write(str(end_ev))
                         end_code(end_ev.winner)
@@ -285,15 +400,31 @@ try:
                             'l,1,' + intermediate_string.rstrip('\n') + ',' + str(v))
                         end_code(101)
                     except IOError as e:
-                        try:
-                            intermediate_string = parser_func(p, popen_val_obj)
-                            log_file.write('v,1,' + intermediate_string)
-                            popen_obj1.stdin.write(intermediate_string)
+                        # try:
+                        intermediate_string = parser_func(p, popen_val_obj)
+                        if intermediate_string[0] != -2:
+                            log_file.write('v,1,' + intermediate_string[0])
+                            popen_obj1.stdin.write(intermediate_string[0])
+                        else:
+                            if intermediate_string[3] == 0:
+                                log_file.write(
+                                    'w,'+intermediate_string[1], ','+intermediate_string[2])
+                                end_code(102)
+                            elif intermediate_string[3] == 1:
+                                log_file.write(
+                                    'w,'+intermediate_string[1], ','+intermediate_string[2])
+                                end_code(101)
+                            elif intermediate_string[3] == -1:
+                                log_file.write(
+                                    'd,'+intermediate_string[1])
+                                end_code(100)
+                            #log_file.write('v,1,' + intermediate_string)
+                            # popen_obj1.stdin.write(intermediate_string)
                         #log_file.write('i,1,' + str(e))
                         # end_code(101)
-                        except EndGameError as end_ev:
-                            log_file.write(str(end_ev))
-                            end_code(end_ev.winner)
+                        # except EndGameError as end_ev:
+                            # log_file.write(str(end_ev))
+                            # end_code(end_ev.winner)
                 else:
                     log_file.write('i,1,No I/O detected')
                     end_code(101)
