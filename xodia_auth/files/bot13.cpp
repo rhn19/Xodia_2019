@@ -763,7 +763,7 @@ int main()
 	int player;
 	cin >> player;
 	cin.get();
-	bot b1(board, 2, player);
+	bot b1(board, 4, player);
 	//bot b2(board, 4, black);
 	playAgainstBot(b1);
 }

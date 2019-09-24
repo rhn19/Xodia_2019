@@ -264,3 +264,12 @@ class GridView(View):
                 log_file.close()
 
         return render(request, self.template_name, {'error': error_pass, 'log': log_pass, 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})
+
+
+class LeaderBoard(View):
+    template_name = 'auth_app/leaderboard.html'
+
+    def get(self, request):
+        au = request.user.is_authenticated
+        pro = Profile.objects.all().order_by('-score')
+        return render(request, self.template_name, {'au': au, 'pro': pro})

@@ -143,17 +143,6 @@
                 rel="tooltip"
                 title="Contact"
                 data-placement="bottom"
-                href="{% url 'leader' %}"
-              >
-                Leaderboard
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                rel="tooltip"
-                title="Contact"
-                data-placement="bottom"
                 href="{% url 'user_login' %}#Contact"
               >
                 Contact
@@ -213,28 +202,6 @@
                 href="{% url 'login_success' %}#Contact"
               >
                 Contact
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                rel="tooltip"
-                title="Contact"
-                data-placement="bottom"
-                href="{% url 'leader' %}"
-              >
-                Leaderboard
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                rel="tooltip"
-                title="Contact"
-                data-placement="bottom"
-                href="{% url 'grid' %}"
-              >
-                Submit Bot
               </a>
             </li>
             <li class="nav-item">
@@ -333,7 +300,9 @@
                   String Notation: The alphabet represents the row and the
                   number represents the diagonal. For example, C4 represents the
                   marble along diagonal 4 in the row C. <br /><br />
-
+                  To move using string input, enter the coordinates of the two
+                  dragons you want to select sequentially separated by a
+                  space<br /><br />
                   1. To play the move, <br />i. Select the first dragon that you
                   want to move. <br />ii. Select the second dragon in the
                   direction in which you want both the dragons to slide.

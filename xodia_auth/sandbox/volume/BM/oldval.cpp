@@ -1,7 +1,7 @@
 /*
 	Repitition draw functionality added
 */
-
+#include <unistd.h>
 #include <iostream>
 #include <math.h>
 #include <map>
@@ -128,7 +128,7 @@ void Board::display()
 			else
 				cout << "_ ";
 		}
-		cout << endl;
+		cout << "\n";
 		row++;
 	}
 	for (int i = 4; i < 7; i++)
@@ -145,11 +145,12 @@ void Board::display()
 			else
 				cout << "_ ";
 		}
-		cout << dia << endl;
+		cout << dia << "\n";
 		row++;
 		dia--;
 	}
-	cout << "       1 2 3 4" << endl;
+	cout << "       1 2 3 4"
+		 << "\n";
 }
 
 string Board::getDirection(string rdi, string rdf)
@@ -390,48 +391,39 @@ void play()
 		if (board.movesLeft() == false)
 		{
 			cout << "DRAW\n";
+			cout << s << endl;
 			return;
 		}
 		getline(cin, s);
 
 		if (board.validate(s))
 		{
+			cout << "VALID\n";
+			cout << s << "\n";
 			board.move(s);
-			if (board.winner() == white)
-			{
-				cout << "WIN\n";
-				cout << s << endl;
-				cout << "1\n";
-				cout << "4 dragons knocked off the board!\n";
-				return;
-			}
-			else
-			{
-				cout << "VALID\n";
-				cout << s << endl;
-			}
 		}
 		else
 		{
 			cout << "INVALID MOVE!\n";
-			continue;
+			return;
 		}
-		/*
+
 		if (board.winner() == white)
 		{
 			cout << "WIN\n";
-			cout << s << endl;
-			cout << "1\n";
+			cout << s << "\n";
+			cout << "0" << endl;
 			cout << "4 dragons knocked off the board!\n";
 			return;
 		}
-*/
+
 		drawCheck.push_back(s);
 		if (drawCheck.size() == 9)
 		{
 			if ((drawCheck[0] == drawCheck[4] && drawCheck[4] == drawCheck[8]) && (drawCheck[1] == drawCheck[5]) && (drawCheck[2] == drawCheck[6]) && (drawCheck[3] == drawCheck[7]))
 			{
 				cout << "DRAW\n";
+				cout << s << endl;
 				return;
 			}
 			else
@@ -445,41 +437,31 @@ void play()
 		if (board.validate(s))
 		{
 			board.move(s);
-			if (board.winner() == black)
-			{
-				cout << "WIN\n";
-				cout << s << endl;
-				cout << "0\n";
-				cout << "4 dragons knocked off the board\n";
-				return;
-			}
-			else
-			{
-				cout << "VALID\n";
-				cout << s << "\n";
-			}
+			cout << "VALID\n";
+			cout << s << "\n";
 		}
 		else
 		{
 			cout << "INVALID MOVE!\n";
 			return;
 		}
-		/*
+
 		if (board.winner() == black)
 		{
 			cout << "WIN\n";
-			cout << s << endl;
-			cout << "0\n";
+			cout << s << "\n";
+			cout << "1" << endl;
 			cout << "4 dragons knocked off the board\n";
 			return;
 		}
-*/
+
 		drawCheck.push_back(s);
 		if (drawCheck.size() == 9)
 		{
 			if ((drawCheck[0] == drawCheck[4] && drawCheck[4] == drawCheck[8]) && (drawCheck[1] == drawCheck[5]) && (drawCheck[2] == drawCheck[6]) && (drawCheck[3] == drawCheck[7]))
 			{
 				cout << "DRAW\n";
+				cout << s << endl;
 				return;
 			}
 			else
@@ -493,4 +475,5 @@ void play()
 int main()
 {
 	play();
+	usleep(1000);
 }

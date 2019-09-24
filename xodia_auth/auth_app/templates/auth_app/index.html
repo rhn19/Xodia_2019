@@ -115,6 +115,11 @@
               Playable UI
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" title="Sign-up/Sign-in" data-placement="bottom" href="{% url 'leader' %}">
+              Leaderboard
+            </a>
+          </li>
 		  <li class="nav-item">
             <a class="nav-link" rel="tooltip" title="Contact" data-placement="bottom" href="{% url 'user_login' %}#Contact" >
               Contact
@@ -393,8 +398,7 @@
     <!-- Control Center for Paper Kit: parallax effects, scripts for the example pages etc -->
     <script src="{% static 'assets/js/paper-kit.js' %}" type="text/javascript"></script>
     <script src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"></script>
-    <!--  Google Maps Plugin    -->
-        <script>
+      <script>
       $(document).ready(function() {
 
         if ($("#datetimepicker").length != 0) {

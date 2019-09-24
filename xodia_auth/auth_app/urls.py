@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^register/$', RegisterView.as_view(), name="user_register"),
     url(r'^play/$', PlayableUI.as_view(), name="playable_ui"),
     url(r'^submit/$', GridView.as_view(), name="grid"),
+    url(r'^leader/$', LeaderBoard.as_view(), name="leader")
 ]
