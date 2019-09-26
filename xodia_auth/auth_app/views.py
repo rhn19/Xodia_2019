@@ -141,7 +141,7 @@ class GridView(View):
         au = request.user.is_authenticated
         if request.user.is_authenticated:
             all_players = User.objects.all()
-            return render(request, self.template_name, {'pro': all_players, 'au': au})
+            return render(request, self.template_name, {'pro': all_players, 'au': au, 'opp': 39})
         else:
             return HttpResponseRedirect(reverse('user_login'))
 
@@ -153,8 +153,6 @@ class GridView(View):
                 return self.matchGame(request)
             elif 'viewlog' in request.POST:
                 return self.viewLogs(request)
-            else:
-                return HttpResponse('wrong')
         else:
             return redirect('user_login')
 
@@ -166,7 +164,7 @@ class GridView(View):
 
         ext = play.name.split('.')[-1]
         if play.size > 1000000:
-            return render(request, self.template_name, {'ms': 'File size should be less than 1 MB!', 'pro': all_players, 'au': au})
+            return render(request, self.template_name, {'ms': 'File size should be less than 1 MB!', 'pro': all_players, 'au': au, 'opp': 39})
 
         if ext in ['cpp', 'c']:
             old_file = player.bot_path + '.' + player.bot_ext
@@ -181,10 +179,10 @@ class GridView(View):
             player.bot_ext = ext
 
             player.save()
-            return render(request, self.template_name, {'ms': 'Bot uploaded!', 'pro': all_players, 'au': au})
+            return render(request, self.template_name, {'ms': 'Bot uploaded!', 'pro': all_players, 'au': au, 'opp': 39})
 
         else:
-            return render(request, self.template_name, {'ms': 'File should be a C or C++ file!', 'pro': all_players, 'au': au})
+            return render(request, self.template_name, {'ms': 'File should be a C or C++ file!', 'pro': all_players, 'au': au, 'opp': 39})
 
     def matchGame(self, request):
         pro = User.objects.all()
@@ -194,7 +192,7 @@ class GridView(View):
         opp_id = request.POST['oppid']
         if not opp_id:
             return render(request, self.template_name,
-                          {'ms': 'Please Select an opponent', 'au': au, 'pro': pro, 'opp': 41})
+                          {'ms': 'Please Select an opponent', 'au': au, 'pro': pro, 'opp': 39})
         my_id = curr_obj.pk
         match = str(my_id) + 'v' + opp_id
         reverse_match = opp_id + 'v' + str(my_id)
@@ -225,7 +223,6 @@ class GridView(View):
         return render(request, self.template_name, {'ms': 'Match requested!', 'au': au, 'pro': pro, 'username': request.user.username, 'opp': int(opp_id)})
 
     def viewLogs(self, request):
-        print 'inview'
         player = request.user
         opp_id = request.POST['oppid']
         opp = User.objects.get(pk=opp_id)

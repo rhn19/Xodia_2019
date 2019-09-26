@@ -197,7 +197,6 @@
                   style="font-size:0.7rem;"
                   class="btn button-primary col-2"
                   id="stringbtn"
-                  onclick="stringInput()"
                 >
                   Submit
                 </button>
@@ -239,7 +238,7 @@
               </div>
 
               <div class="row" style="margin-top:2rem;padding-left:0.5rem">
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                   <select
                     name="oppid"
                     id="drop"
@@ -247,20 +246,12 @@
                     class="btn button-primary"
                   >
                     {% for p in pro %} {% if not p.is_superuser %}
-                    <option
-                      value="{{ p.pk }}"
-                      {%
-                      if
-                      p.pk
-                      is
-                      opp
-                      %}selected{%
-                      endif
-                      %}
-                      >{{ p.username }}</option
-                    >{% endif %}{% endfor %}
+                    <option value="{{ p.pk }}" {% if p.pk is opp %} selected {% endif %}>
+                      {{ p.username }}</option>
+                    {% endif %}{% endfor %}
                   </select>
                 </div>
+
                 <div class="col-lg-5" style="padding-top:0.5rem">
                   <input type="checkbox" name="p2flag" value="1" /><font
                     style="color:white"
@@ -405,6 +396,48 @@
           }
         }
       });
+    </script>
+    <script>
+      let pause = false;
+      let stringDone = false;
+      let started = false;
+
+      document.getElementById("pause").onclick = function() {
+        if (pause) {
+          pause = false;
+          document.getElementById("pause").innerHTML = "Pause";
+        } else {
+          pause = true;
+          document.getElementById("pause").innerHTML = "Play";
+        }
+      };
+
+      document.getElementById("start").onclick = function() {
+        if(!started){
+          started = true;
+          data = document.getElementById("logs").innerHTML;
+          data = data.split("<br>");
+          for (let i = 0; i < data.length; i++) {
+            moves = data[i].trim();
+            moves = moves.split(",");
+            data[i] = moves[2];
+          }
+          console.log(data);
+
+          let i = 0;
+          setInterval(function() {
+            if (!pause && !stringDone) {
+              document.getElementById("stringip").value = data[i];
+              document.getElementById("stringbtn").click();
+              console.log(document.getElementById("stringip").value);
+              i += 1;
+            }
+            if (i > data.length) {
+              stringDone = true;
+            }
+          }, 1500);
+        }
+      };
     </script>
   </body>
 </html>

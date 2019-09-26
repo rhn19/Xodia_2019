@@ -17,6 +17,6 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^twomonthsthreedays/', admin.site.urls),
+    url(r'^ninetysixpercent/', admin.site.urls),
     url(r'^', include('auth_app.urls')),
 ]

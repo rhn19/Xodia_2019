@@ -82,7 +82,6 @@ class token {
 init();
 
 function init() {
-  console.log(undoButton);
   create_board();
 
   var k = s;
@@ -1079,84 +1078,6 @@ function valid2(t1, t2, pushToken, moveDirection) {
   console.log(p2[pushToken]);
   console.log(p[pushToken]);
 }
-
-undoButton.onclick = function() {
-  console.log(p5);
-  console.log("Inside undo");
-  if (count1 === 0) {
-    turn = !turn;
-    if (p5 == undefined) {
-      if (b == 1) {
-        p4.m = p3.m;
-        p3.m = p3.m - 50;
-      } else if (b == 2) {
-        p4.m = p3.m;
-        p3.m = p3.m + 50;
-      } else if (b == 3) {
-        p4.m = p3.m;
-        p4.n = p3.n;
-        p3.m = p3.m - 25;
-        p3.n = p3.n - 43.3;
-      } else if (b == 4) {
-        p4.m = p3.m;
-        p4.n = p3.n;
-        p3.m = p3.m + 25;
-        p3.n = p3.n - 43.3;
-      } else if (b == 5) {
-        p4.m = p3.m;
-        p4.n = p3.n;
-        p3.m = p3.m - 25;
-        p3.n = p3.n + 43.3;
-      } else if (b == 6) {
-        p4.m = p3.m;
-        p4.n = p3.n;
-        p3.m = p3.m + 25;
-        p3.n = p3.n + 43.3;
-      }
-      count1++;
-    } else {
-      console.log("2nd case");
-      if (b === 1) {
-        p4.m = p3.m;
-        p3.m = p3.m - 50;
-        p5.m = p5.m - 50;
-      } else if (b === 2) {
-        p4.m = p3.m;
-        p3.m = p3.m + 50;
-        p5.m = p5.m + 50;
-      } else if (b === 3) {
-        p4.m = p3.m;
-        p4.n = p3.n;
-        p3.m = p3.m - 25;
-        p3.n = p3.n - 43.3;
-        p5.m = p5.m - 25;
-        p5.n = p5.n - 43.3;
-      } else if (b === 4) {
-        p4.m = p3.m;
-        p4.n = p3.n;
-        p3.m = p3.m + 25;
-        p3.n = p3.n - 43.3;
-        p5.m = p5.m + 25;
-        p5.n = p5.n - 43.3;
-      } else if (b === 5) {
-        p4.m = p3.m;
-        p4.n = p3.n;
-        p3.m = p3.m - 25;
-        p3.n = p3.n + 43.3;
-        p5.m = p5.m - 25;
-        p5.n = p5.n + 43.3;
-      } else if (b === 6) {
-        p4.m = p3.m;
-        p4.n = p3.n;
-        p3.m = p3.m + 25;
-        p3.n = p3.n + 43.3;
-        p5.m = p5.m + 25;
-        p5.n = p5.n + 43.3;
-      }
-      count1++;
-    }
-  } else alert("UNDO ALLOWED ONLY ONCE!!");
-};
 
 //string input
 var dict = {

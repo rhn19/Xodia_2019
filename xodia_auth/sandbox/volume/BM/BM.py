@@ -12,8 +12,8 @@ from sys import exit, argv
 from val_parser import parser_func, EndGameError
 
 time_limits = {
-    "cpp": 5000,
-    "c": 2000,
+    "cpp": 3000,
+    "c": 3000,
     "py": 6000,
 }
 
